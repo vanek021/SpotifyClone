@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="stylesheet" href="../src/index.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -22,16 +23,153 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <div id="root">
+      <div class="app">
+        <header class="header">
+            <div class="header__row">
+                <a class="header__item" href=".">
+                    <div class="header__home-image">
+                        <img src="src/common.blocks/header/home-image.png">
+                    </div>
+                    <div class="header__text">ГЛАВНАЯ</div>
+                  </a>
+                <a class="header__item" href="/library.html">
+                    <div class="header__library-image">
+                        <img src="src/common.blocks/header/library-image.png">
+                    </div>
+                    <div class="header__text">МОЯ МЕДИАТЕКА</div>
+                  </a>
+                <a class="header__item" href="/search.html">
+                    <div class="header__search-image">
+                        <img src="src/common.blocks/header/search-image.png">
+                    </div>
+                    <div class="header__text">ПОИСК</div>
+                  </a>
+                <a class="header__item" href="/author.html">
+                    <div class="header__from-author-image">
+                        <img src="src/common.blocks/header/from-author-image.png">
+                    </div>
+                    <div class="header__text">ОТ АВТОРА</div>
+                  </a>
+                <a class="header__item" href="/account.html">
+                    <div class="header__user-image">
+                        <img src="src/common.blocks/header/user-image.png">
+                    </div>
+                    <div class="header__text">USER</div>
+                  </a>
+            </div>           
+        </header>
+        <main class="content">
+            <div class="spotify-container">
+                <div class="spotify-container__title">Недавно прослушано</div>               
+                <div class="spotify-container__row">
+                    <div class="playlist">
+                        <div class="playlist__image">
+                            <img src="src/common.blocks/content/spotify-container/playlist/scary-stories-image.png">
+                        </div>
+                        <div class="playlist__title">Страшные? истории</div>
+                        <div class="playlist__description">Air AT</div>
+                    </div>
+                    <div class="playlist">
+                        <div class="playlist__image">
+                            <img src="src/common.blocks/content/spotify-container/playlist/favorite-tracks-image.png">
+                        </div>
+                        <div class="playlist__title">Любимые треки</div>
+                        <div class="playlist__description">3 трека</div>
+                    </div>
+                </div>
+            </div>
+            <div class="spotify-container">
+                <div class="spotify-container__title">Послушай эти шоу</div>               
+                <div class="spotify-container__row">
+                    <div class="playlist">
+                        <div class="playlist__image">
+                            <img src="src/common.blocks/content/spotify-container/playlist/soulful-podcast-image.png">
+                        </div>
+                        <div class="playlist__title">Душевный подкаст</div>
+                        <div class="playlist__description">Константин Тростенюк и Денис Карамышев</div>
+                    </div>
+                    <div class="playlist">
+                        <div class="playlist__image">
+                            <img src="src/common.blocks/content/spotify-container/playlist/scp-foundation-image.png">
+                        </div>
+                        <div class="playlist__title">SCP Foundation</div>
+                        <div class="playlist__description">SCP Foundation</div>
+                    </div>
+                    <div class="playlist">
+                        <div class="playlist__image">
+                            <img src="src/common.blocks/content/spotify-container/playlist/distractible-image.png">
+                        </div>
+                        <div class="playlist__title">Distractible</div>
+                        <div class="playlist__description">Wood Elf Media</div>
+                    </div>
+                    <div class="playlist">
+                        <div class="playlist__image">
+                            <img src="src/common.blocks/content/spotify-container/playlist/joe-rogan-image.png">
+                        </div>
+                        <div class="playlist__title">The Joe Rogan Exp..</div>
+                        <div class="playlist__description">Joe Rogan</div>
+                    </div>
+                    <div class="playlist">
+                        <div class="playlist__image">
+                            <img src="src/common.blocks/content/spotify-container/playlist/favorite-tracks-image.png">
+                        </div>
+                        <div class="playlist__title">Любимые треки</div>
+                        <div class="playlist__description">3 трека</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="footer__row">
+                <div class="footer__current-song">
+                    <div class="footer_current-song-image">
+                        <img src="src/common.blocks/footer/current-song-image.png">
+                    </div>
+                    <div class="footer__current-song-desc">
+                        <div class="footer__current-song-name">Role Model</div>
+                        <div class="footer__current-song-author">daysormay, Tessa Violet</div> 
+                    </div>                         
+                </div>
+                <div class="footer__player">
+                    <div class="footer__control">
+                        <div class="footer__prev-song">
+                            <div class="footer__prev-song-image">
+                                <img src="src/common.blocks/footer/prev-song-image.png">
+                            </div>
+                        </div>
+                        <div class="footer__pause">
+                            <div class="footer__pause-image">
+                                <img src="src/common.blocks/footer/pause-image.png">
+                            </div>
+                        </div>
+                        <div class="footer__next-song">
+                            <div class="footer__next-song-image">
+                                <img src="src/common.blocks/footer/next-song-image.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer__progress">
+                        <div class="footer__timer">0:14</div>
+                        <div class="footer__music-bar">
+                            <div class="footer__music-bar-image">
+                                <img src="src/common.blocks/footer/music-bar-image.png">
+                            </div>
+                        </div>
+                        <div class="footer__timer">6:54</div>
+                    </div>
+                </div>
+                <div class="footer__volume">
+                    <div class="footer__volume-image">
+                        <img src="src/common.blocks/footer/volume-image.png">
+                    </div>
+                    <div class="footer__volume-bar-image">
+                        <img src="src/common.blocks/footer/volume-bar-image.png">
+                    </div>
+                </div>
+            </div>
+        </footer>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Spotify</title>
+        <link rel="stylesheet" href="../src/index.css"/>
+    </head>
+    <body>
+        <div class="app">
+            <header class="header">
+                <div class="header__row">
+                    <a class="header__item" href=".">
+                        <div class="header__home-image">
+                            <img src="src/common.blocks/header/home-image.png">
+                        </div>
+                        <div class="header__text">ГЛАВНАЯ</div>
+                      </a>
+                    <a class="header__item" href="/library.html">
+                        <div class="header__library-image">
+                            <img src="src/common.blocks/header/library-image.png">
+                        </div>
+                        <div class="header__text">МОЯ МЕДИАТЕКА</div>
+                      </a>
+                    <a class="header__item" href="/search.html">
+                        <div class="header__search-image">
+                            <img src="src/common.blocks/header/search-image.png">
+                        </div>
+                        <div class="header__text">ПОИСК</div>
+                      </a>
+                    <a class="header__item" href="/author.html">
+                        <div class="header__from-author-image">
+                            <img src="src/common.blocks/header/from-author-image.png">
+                        </div>
+                        <div class="header__text">ОТ АВТОРА</div>
+                      </a>
+                    <a class="header__item" href="/account.html">
+                        <div class="header__user-image">
+                            <img src="src/common.blocks/header/user-image.png">
+                        </div>
+                        <div class="header__text">USER</div>
+                      </a>
+                </div>           
+            </header>
+            <main class="content">
+                <div class="search">
+                    <div class="search__bar">               
+                        <input class="search__input" type="text" placeholder="Исполнитель, трек или подкаст...">
+                    </div>
+                </div>
+                <div class="result">
+                    <div class="result__container">
+                        <div class="result__best">
+                            <div class="result__title">Лучший результат</div>
+                            <div class="result__best-info">
+                                <div class="result__best-avatar-image">
+                                    <img src="src/common.blocks/content/account-row/tessa-violet-image.png">
+                                </div>
+                                <div class="result__best-subtitle">Tessa Violet</div>
+                                <div class="result__best-description">Исполнитель</div>
+                            </div>
+                        </div>
+                        <div class="result__songs">
+                            <div class="result__title">Треки</div>
+                            <div class="result__songs-row">
+                                <div class="song-item">
+                                    <div class="song-item__wrapper">
+                                        <div class="song-item__image">
+                                            <img src="src/common.blocks/content/result/song-item/yes-mom-image.png">
+                                        </div>
+                                        <div class="song-item__desc">
+                                            <div class="song-item__name">
+                                                YES MOM
+                                            </div>
+                                            <div class="song-item__author">
+                                                Tessa Violet
+                                            </div>
+                                        </div>
+                                    </div>                     
+                                    <div class="song-item__time">
+                                        2:42
+                                    </div>
+                                </div>
+                                <div class="song-item">
+                                    <div class="song-item__wrapper">
+                                        <div class="song-item__image">
+                                            <img src="src/common.blocks/content/result/song-item/crush-image.png">
+                                        </div>
+                                        <div class="song-item__desc">
+                                            <div class="song-item__name">
+                                                Crush
+                                            </div>
+                                            <div class="song-item__author">
+                                                Tessa Violet
+                                            </div>
+                                        </div>  
+                                    </div>                                                         
+                                    <div class="song-item__time">
+                                        3:36
+                                    </div>
+                                </div>
+                                <div class="song-item">
+                                    <div class="song-item__wrapper">
+                                        <div class="song-item__image">
+                                            <img src="src/common.blocks/content/result/song-item/tessa-image.png">
+                                        </div>
+                                        <div class="song-item__desc">
+                                            <div class="song-item__name">
+                                                Tessa
+                                            </div>
+                                            <div class="song-item__author">
+                                                Steve Jablonsky
+                                            </div>
+                                        </div>  
+                                    </div>                              
+                                    <div class="song-item__time">
+                                        2:48
+                                    </div>
+                                </div>
+                                <div class="song-item">
+                                    <div class="song-item__wrapper">
+                                        <div class="song-item__image">
+                                            <img src="src/common.blocks/content/result/song-item/i-like-the-idea-of-you-image.png">
+                                        </div>
+                                        <div class="song-item__desc">
+                                            <div class="song-item__name">
+                                                I Like (the idea of) You
+                                            </div>
+                                            <div class="song-item__author">
+                                                Tessa Violet
+                                            </div>
+                                        </div>   
+                                    </div>                            
+                                    <div class="song-item__time">
+                                        5:45
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result__container">
+                        <div class="performers">
+                            <div class="performers__title">Исполнители</div>
+                            <div class="performers__performers-row">
+                                <div class="performers__performer">
+                                    <div class="performers__performer-image">
+                                        <img src="src/common.blocks/content/result/performers/tessa-violet-image.png">
+                                    </div>
+                                    <div class="performers__performer-name">Tessa Violet</div>
+                                    <div class="performers__performer-desc">Исполнитель</div>
+                                </div>
+                                <div class="performers__performer">
+                                    <div class="performers__performer-image">
+                                        <img src="src/common.blocks/content/result/performers/tessa-rae-image.png">
+                                    </div>
+                                    <div class="performers__performer-name">Tessa Rae</div>
+                                    <div class="performers__performer-desc">Исполнитель</div>
+                                </div>
+                                <div class="performers__performer">
+                                    <div class="performers__performer-image">
+                                        <img src="src/common.blocks/content/result/performers/tessa-image.png">
+                                    </div>
+                                    <div class="performers__performer-name">Tessa</div>
+                                    <div class="performers__performer-desc">Исполнитель</div>
+                                </div>
+                                <div class="performers__performer">
+                                    <div class="performers__performer-image">
+                                        <img src="src/common.blocks/content/result/performers/tessa-thompson-image.png">
+                                    </div>
+                                    <div class="performers__performer-name">Tessa Thompson</div>
+                                    <div class="performers__performer-desc">Исполнитель</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="footer">
+                <div class="footer__row">
+                    <div class="footer__current-song">
+                        <div class="footer_current-song-image">
+                            <img src="src/common.blocks/footer/current-song-image.png">
+                        </div>
+                        <div class="footer__current-song-desc">
+                            <div class="footer__current-song-name">Role Model</div>
+                            <div class="footer__current-song-author">daysormay, Tessa Violet</div> 
+                        </div>                         
+                    </div>
+                    <div class="footer__player">
+                        <div class="footer__control">
+                            <div class="footer__prev-song">
+                                <div class="footer__prev-song-image">
+                                    <img src="src/common.blocks/footer/prev-song-image.png">
+                                </div>
+                            </div>
+                            <div class="footer__pause">
+                                <div class="footer__pause-image">
+                                    <img src="src/common.blocks/footer/pause-image.png">
+                                </div>
+                            </div>
+                            <div class="footer__next-song">
+                                <div class="footer__next-song-image">
+                                    <img src="src/common.blocks/footer/next-song-image.png">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer__progress">
+                            <div class="footer__timer">0:14</div>
+                            <div class="footer__music-bar">
+                                <div class="footer__music-bar-image">
+                                    <img src="src/common.blocks/footer/music-bar-image.png">
+                                </div>
+                            </div>
+                            <div class="footer__timer">6:54</div>
+                        </div>
+                    </div>
+                    <div class="footer__volume">
+                        <div class="footer__volume-image">
+                            <img src="src/common.blocks/footer/volume-image.png">
+                        </div>
+                        <div class="footer__volume-bar-image">
+                            <img src="src/common.blocks/footer/volume-bar-image.png">
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>
