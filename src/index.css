@@ -12,11 +12,11 @@
 }
 
 .header {
-    background-color: #000000;  
+    background-color: #000;  
 }
 
 .header__row {
-    margin: 12.5px 0;
+    margin: 13px 0;
     display: flex;
     align-content: center;
     justify-content: space-around;
@@ -108,7 +108,7 @@
 }
 
 .footer {
-    background-color: #000000;
+    background-color: #000;
     height: 100px;
 }
 
@@ -249,7 +249,7 @@
 .account-row__data-item {
     display: flex;
     justify-content: space-between;
-    margin: 15px 15px 15px 15px;
+    margin: 15px;
 }
 
 .account-row__item-key {
