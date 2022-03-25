@@ -7,8 +7,7 @@
     font-family: "Roboto", Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     flex-flow: column nowrap;
-    height: 100vh;
-    
+    height: 100vh;   
 }
 
 .header {
@@ -34,7 +33,7 @@
     font-weight: 700;
     font-size: 18px;
     line-height: 21px;
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .content {
@@ -48,7 +47,7 @@
     font-weight: 400;
     font-size: 24px;
     line-height: 28px;
-    color: #FFFFFF;
+    color: #FFF;
     text-align: center;
 }
 
@@ -61,7 +60,7 @@
     font-weight: 700;
     font-size: 24px;
     line-height: 28px;
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .spotify-container__row {
@@ -87,7 +86,7 @@
     font-weight: 700;
     font-size: 14px;
     line-height: 16px;
-    color: #FFFFFF;
+    color: #FFF;
     margin-top: 8px;
 }
 
@@ -136,7 +135,7 @@
     font-weight: 400;
     font-size: 14px;
     line-height: 12px;
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .footer__current-song-author {
@@ -218,7 +217,7 @@
     font-weight: 700;
     font-size: 14px;
     line-height: 16px;
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .account-row__user-description {
@@ -268,7 +267,7 @@
     font-size: 16px;
     line-height: 19px;
     text-align: center;
-    color: #FFFFFF;
+    color: #FFF;
     justify-self: flex-end;
 }
 
@@ -289,7 +288,7 @@
     font-size: 30px;
     line-height: 42px;
     text-align: center; 
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .account-row__title {
@@ -297,7 +296,7 @@
     font-weight: 700;
     font-size: 24px;
     line-height: 28px;
-    color: #FFFFFF;
+    color: #FFF;
     margin: 17px 0;
 }
 
@@ -322,7 +321,7 @@
     font-size: 18px;
     line-height: 21px;
     text-align: center;
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .account-row__access-description {
@@ -332,7 +331,7 @@
     font-size: 36px;
     line-height: 42px;
     text-align: center;
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .search__bar {
@@ -355,7 +354,7 @@
     font-weight: 700;
     font-size: 24px;
     line-height: 28px;
-    color: #FFFFFF;
+    color: #FFF;
     padding-bottom: 15px;
     padding-top: 15px;
 }
@@ -375,7 +374,7 @@
     font-weight: 700;
     font-size: 14px;
     line-height: 16px;
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .result__best-description {
@@ -421,7 +420,7 @@
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;   
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .song-item__desc {
@@ -453,7 +452,7 @@
     font-weight: 700;
     font-size: 24px;
     line-height: 28px;
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .performers__performers-row {
@@ -479,7 +478,7 @@
     font-weight: 700;
     font-size: 14px;
     line-height: 16px;  
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .performers__performer-desc {
