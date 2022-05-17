@@ -1,32 +1,32 @@
 import Header from './common/header';
 import Footer from './common/footer';
 import { useEffect, useState } from 'react';
-import { FormFeaturedPlaylists, FormNewAlbumReleases, Constants } from '../js/spotify';
-import { GetFeaturedPlaylistsHTML, GetNewAlbumReleasesHTML } from '../js/InterfaceManager';
-import { MakeRequest } from '../js/requestsManager';
-import { CookieExists } from '../js/cookieManager';
+import { formFeaturedPlaylists, formNewAlbumReleases, constants } from '../js/spotify';
+import { getFeaturedPlaylistsHTML, getNewAlbumReleasesHTML } from '../js/InterfaceManager';
+import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
+import { cookieExists } from '../js/cookieManager';
 
 function Index() {
     const [state, setState] = useState(null)
     const [albumsState, setAlbumsState] = useState(null)
 
     useEffect(() => {
-        if (CookieExists("token") && CookieExists("spotify_id")) {
-            MakeRequest(Constants.GetFeaturedPlaylistsUrl(), 'GET', 'application/json')
+        if (cookieExists("token") && cookieExists("spotify_id")) {
+            makeRequest(constants.getFeaturedPlaylistsUrl(), getRequestHeadersWithToken('GET', 'application/json'))
             .then((response) => {
             if (response instanceof Error) setState(null);
-            else setState(FormFeaturedPlaylists(response.playlists));
+            else setState(formFeaturedPlaylists(response.playlists));
             })
 
-            MakeRequest(Constants.GetNewAlbumReleasesUrl(), 'GET', 'application/json')
+            makeRequest(constants.getNewAlbumReleasesUrl(), getRequestHeadersWithToken('GET', 'application/json'))
             .then((response) => {
             if (response instanceof Error) setAlbumsState(null);
-            else setAlbumsState(FormNewAlbumReleases(response));
+            else setAlbumsState(formNewAlbumReleases(response));
             });
         }
     }, []);
-    let playlists = GetFeaturedPlaylistsHTML(state === null ? null : state.playlists);
-    let albums = GetNewAlbumReleasesHTML(albumsState == null ? null : albumsState.albums);
+    let playlists = getFeaturedPlaylistsHTML(state === null ? null : state.playlists);
+    let albums = getNewAlbumReleasesHTML(albumsState == null ? null : albumsState.albums);
     return (
             <div className="app">
                 <Header/>

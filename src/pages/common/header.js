@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useCurrentUser } from '../../js/userContext';
-import { auth_url } from '../../js/auth';
+import { authUrl } from '../../js/auth';
 import { useEffect } from 'react';
 
 function Header() {
@@ -19,11 +19,11 @@ function Header() {
                     </NavLink>;
     }
     else {
-        accountLink = <a href={auth_url} className="header__item">
+        accountLink = <a href={authUrl} className="header__item">
                         <div className="header__user-image">
                             <img src="resources/images/user-image.png" alt="user-img"/>
                         </div>
-                        <div className="header__text">{currentUser.name}</div>
+                        <div className="header__text">ВОЙТИ</div>
                     </a>;
     }
     return(

@@ -1,28 +1,27 @@
 import { defaultAvatar, defaultPlaylistImage } from "./baseResources";
-import { MakeRequest } from "./requestsManager";
+import { makeRequest, getRequestHeadersWithToken } from "./requestsManager";
 
-// Constant's block
-export const search_tracks_limit = 4;
-export const search_artists_limit = 8;
-export const featured_playlists_limit = 20;
-export const new_albums_limit = 20;
-
-export const Constants = {
+export const searchTracksLimit = 4;
+export const searchArtistsLimit = 8;
+export const featuredPlaylistsLimit = 20;
+export const newAlbumsLimit = 20;
+export const constants = {
     ifUsersFollowPlaylistUrl: function(playlistId, userId) { return `https://api.spotify.com/v1/playlists/${playlistId}/followers/contains?ids=${userId}` },
-    FollwPlaylistUrl: function(playlistId) { return `https://api.spotify.com/v1/playlists/${playlistId}/followers`; },
-    FollowShowUrl: function(showId) { return `https://api.spotify.com/v1/me/shows?ids=${showId}`; },
-    IfUserFollowShowUrl: function(showId) { return `https://api.spotify.com/v1/me/shows/contains?ids=${showId}`; },
-    FollowAlbumUrl: function(albumId) { return `https://api.spotify.com/v1/me/albums?ids=${albumId}`; },
-    IfUserFollowAlbumUrl: function(albumId) { return `https://api.spotify.com/v1/me/albums/contains?ids=${albumId}`; },
-    SearchResultUrl: function(query) { return `https://api.spotify.com/v1/search?type=artist,track&q=${query}`; },
-    GetAlbumUrl: function(albumId) { return `https://api.spotify.com/v1/albums/${albumId}`; },
-    GetPlaylistUrl: function(playlistId) { return `https://api.spotify.com/v1/playlists/${playlistId}`; },
-    GetShowUrl: function(showId) { return `https://api.spotify.com/v1/shows/${showId}`; },
-    GetSavedShowsUrl: function() { return `https://api.spotify.com/v1/me/shows`; },
-    GetCurrentUserPlaylistsUrl: function() { return `https://api.spotify.com/v1/me/playlists`; },
-    GetNewAlbumReleasesUrl: function() { return `https://api.spotify.com/v1/browse/new-releases`; },
-    GetFeaturedPlaylistsUrl: function() { return `https://api.spotify.com/v1/browse/featured-playlists`; },
-    GetCurrentUserProfileUrl: function() { return `https://api.spotify.com/v1/me`; }
+    follwPlaylistUrl: function(playlistId) { return `https://api.spotify.com/v1/playlists/${playlistId}/followers`; },
+    followShowUrl: function(showId) { return `https://api.spotify.com/v1/me/shows?ids=${showId}`; },
+    ifUserFollowShowUrl: function(showId) { return `https://api.spotify.com/v1/me/shows/contains?ids=${showId}`; },
+    followAlbumUrl: function(albumId) { return `https://api.spotify.com/v1/me/albums?ids=${albumId}`; },
+    ifUserFollowAlbumUrl: function(albumId) { return `https://api.spotify.com/v1/me/albums/contains?ids=${albumId}`; },
+    searchResultUrl: function(query) { return `https://api.spotify.com/v1/search?type=artist,track&q=${query}`; },
+    getAlbumUrl: function(albumId) { return `https://api.spotify.com/v1/albums/${albumId}`; },
+    getPlaylistUrl: function(playlistId) { return `https://api.spotify.com/v1/playlists/${playlistId}`; },
+    getShowUrl: function(showId) { return `https://api.spotify.com/v1/shows/${showId}`; },
+    getSavedShowsUrl: function() { return `https://api.spotify.com/v1/me/shows`; },
+    getCurrentUserPlaylistsUrl: function() { return `https://api.spotify.com/v1/me/playlists`; },
+    getNewAlbumReleasesUrl: function() { return `https://api.spotify.com/v1/browse/new-releases`; },
+    getFeaturedPlaylistsUrl: function() { return `https://api.spotify.com/v1/browse/featured-playlists`; },
+    getCurrentUserProfileUrl: function() { return `https://api.spotify.com/v1/me`; },
+    getApiTokenUrl: function() { return `https://accounts.spotify.com/api/token`; }
 
 };
 
@@ -39,13 +38,91 @@ const subscriptions = {
         name: "Премиум",
         desc: "Премиум подписка. Доступен весь функционал."
     }
-}
+};
+
+const itemHandlers = {
+    episodeItemHandler: function(episode) {
+        return {
+            href: episode.href,
+            name: episode.name,
+            desc: episode.description > 15 ? episode.description.slice(0, 15) + '...' : episode.description,
+            image: episode.images.length > 0 ? episode.images[0].url : defaultAvatar,
+            duration: episode.duration_ms
+        }
+    },
+    playlistTrackHandler: function(item) {
+        return {
+            href: item.track.href,
+            name: item.track.name,
+            author: item.track.artists.map(x => x.name).join(' '),
+            image_url: item.track.album.images.length > 0 ? item.track.album.images[0].url : defaultAvatar,
+            duration: item.track.duration_ms
+        }
+    },
+    albumTrackHandler: function(item) {
+        return {
+            href: item.href,
+            name: item.name,
+            author: item.artists.map(x => x.name).join(' '),
+            duration: item.duration_ms
+        }
+    },
+    searchTrackHandler: function(item) {
+        return {
+            href: item.href,
+            name: item.name,
+            image_url: item.album.images.length > 0 ? item.album.images[0].url : defaultAvatar,
+            type: 'Трек',
+            author: item.artists.map(x => x.name).join(' '),
+            duration: item.duration_ms           
+        }
+    },
+
+    showHandler: function(item) {
+        return {
+            href: item.show.href,
+            name: item.show.name,
+            image_url: item.show.images.length > 0 ? item.show.images[0].url : defaultPlaylistImage,
+            id: item.show.id,
+            owner: item.show.publisher > 15 ? item.show.publisher.slice(0, 15) + '...' : item.show.publisher,
+            type: 'Подкаст'           
+        }
+    },
+    albumHandler: function(item) {
+        return {
+            href: item.href,
+            name: item.name.length > 15 ? item.name.slice(0, 15) + '...' : item.name,
+            image_url: item.images.length > 0 ? item.images[0].url : defaultAvatar,
+            desc: 'Треков: ' + item.total_tracks,
+            id: item.id,
+            type: 'Альбом'
+        }
+    },
+    playlistHandler: function(item) {
+        return {
+            href: item.href,
+            name: item.name,
+            image_url: item.images.length > 0 ? item.images[0].url : defaultPlaylistImage,
+            id: item.id,
+            owner: item.owner.display_name.length > 15 ? item.owner.display_name.slice(0, 15) + '...' : item.owner.display_name,
+            type: 'Плейлист'
+        }
+    },
+    artistHandler: function(item) {
+        return {
+            href: item.href,
+            name: item.name,
+            image_url: item.images.length > 0 ? item.images[0].url : defaultAvatar,
+            type: 'Исполнитель'
+        }
+    }
+};
 
 /**
  * Returns name of subscription by provided sub_name from Spotify response.
  * @param  {} sub_name - Subscription name.
  */
-export function GetSubscriptionName(sub_name) {
+export function getSubscriptionName(sub_name) {
     if (subscriptions.hasOwnProperty(sub_name))
         return subscriptions[sub_name].name;
     else
@@ -56,7 +133,7 @@ export function GetSubscriptionName(sub_name) {
  * Returns description of subscription by provided sub_name from Spotify response.
  * @param  {} sub_name - Subscription name.
  */
-export function GetSubscriptionDesc(sub_name) {
+export function getSubscriptionDesc(sub_name) {
     if (subscriptions.hasOwnProperty(sub_name))
         return subscriptions[sub_name].desc;
     else
@@ -68,9 +145,10 @@ export function GetSubscriptionDesc(sub_name) {
  * @param  {} data - Returned response result in JSON format from search request.
  * @returns Object with fields: href, name, image_url, type.
  */
-function GetBestItemBySearch(data) {
+function getBestItemBySearch(data) {
     if (data.artists.items.length === 0 && data.tracks.items.length === 0)
-        return null;   
+        return null;
+
     if (data.artists.items.length >= 1) {
         let image_link = data.artists.items[0].images[0].url;
         return {
@@ -92,67 +170,26 @@ function GetBestItemBySearch(data) {
 }
 
 /**
- * Return tracks for search
- * @param  {} data - Returned response result in JSON format from search request.
- * @returns Array with track objects with fields: href, name, image_url, type, author, duration
-. */
-function GetTracksFromSearch(data) {
-    let result = [];
-    for (let i = 0; i < data.tracks.items.length; i++) {
-        if (result.length === search_tracks_limit)
-            break;
-        let image_link = data.tracks.items[i].album.images.length > 0 ?
-            data.tracks.items[i].album.images[0].url : defaultAvatar;
-        let track = {
-            href: data.tracks.items[i].href,
-            name: data.tracks.items[i].name,
-            image_url: image_link,
-            type: 'Трек',
-            author: data.tracks.items[i].artists.map(x => x.name).join(' '),
-            duration: data.tracks.items[i].duration_ms
-        };
-        result.push(track);
-    }
-    return result;
-}
-
-/**
- * Return artists for search
- * @param  {} data - Returned response result in JSON format from search request.
- * @returns Array with artists objects with fields: href, name, image_url, type.
- */
-function GetArtistsFromSearch(data) {
-    let result = [];
-    for (let i = 0; i < data.artists.items.length; i++) {
-        if (result.length === search_artists_limit)
-            break;
-        let image_link = data.artists.items[i].images.length > 0 ?
-            data.artists.items[i].images[0].url : defaultAvatar;
-        let artist = {
-            href: data.artists.items[i].href,
-            name: data.artists.items[i].name,
-            image_url: image_link,
-            type: 'Исполнитель'
-        };
-        result.push(artist);
-    }
-    return result;
-}
-
-/**
  * Form search result
  * @param  {} data - Returned response result in JSON format from search request.
  * @returns Result object of search with fields: best, tracks[], artists[]
  */
-export function FormSearchResult(data) {
+export function formSearchResult(data) {
     if (data.artists.items.length === 0 && data.tracks.items.length === 0)
         return null;
+
     let result = {};
-    result.best = GetBestItemBySearch(data);
-    if (!(data.tracks.items === undefined && data.tracks.items.length === 0))
-        result.tracks = GetTracksFromSearch(data);
-    if (!(data.artists.items === undefined && data.artists.items.length === 0))
-        result.artists = GetArtistsFromSearch(data);
+    result.best = getBestItemBySearch(data);
+    result.tracks = [];
+    result.artists = [];
+    
+    if (data.tracks.items !== undefined && data.tracks.items.length > 0)
+         result.tracks = handleSpotifyArray(data.tracks.items, itemHandlers.searchTrackHandler)
+            .slice(0, searchTracksLimit);
+            
+    if (data.artists.items !== undefined && data.artists.items.length > 0)
+        result.artists = handleSpotifyArray(data.artists.items, itemHandlers.artistHandler)
+            .slice(0, searchArtistsLimit);
     return result;
 }
 
@@ -161,36 +198,10 @@ export function FormSearchResult(data) {
  * @param  {} data - Returned response result in JSON format from featured playlists request.
  * @returns Prepared from request object with result.playlists field
  */
-export function FormFeaturedPlaylists(data) {
+export function formFeaturedPlaylists(data) {
     let result = {};
-    if (!(data.items === undefined && data.items.length === 0))
-        result.playlists = GetFeaturedPlaylists(data);
-    return result;
-}
-
-/**
- * Form array of playlists
- * @param  {} data - Returned response result in JSON format from featured playlists request.
- * @returns Array with featured playlists
- */
-function GetFeaturedPlaylists(data) {
-    let result = [];
-    for (let i = 0; i < data.items.length; i++) {
-        if (result.length === featured_playlists_limit)
-            break;
-        let image_link = data.items[i].images.length > 0 ?
-            data.items[i].images[0].url : defaultPlaylistImage;
-        let playlist = {
-            href: data.items[i].href,
-            name: data.items[i].name,
-            image_url: image_link,
-            id: data.items[i].id,
-            owner: data.items[i].owner.display_name.length > 15 ? 
-                data.items[i].owner.display_name.slice(0, 15) + '...' : data.items[i].owner.display_name,
-            type: 'Плейлист'
-        };
-        result.push(playlist);
-    }
+    if (!(data.items === undefined || data.items.length === 0))
+        result.playlists = handleSpotifyArray(data.items, itemHandlers.playlistHandler);
     return result;
 }
 
@@ -199,37 +210,10 @@ function GetFeaturedPlaylists(data) {
  * @param  {} data - Returned response result in JSON format from new album releases request.
  * @returns Prepared from request object with result.albums field
  */
-export function FormNewAlbumReleases(data) {
+export function formNewAlbumReleases(data) {
     let result = {};
-    if (!(data.albums.items === undefined && data.albums.items.length === 0)) {
-        result.albums = GetNewAlbumReleases(data);
-    }
-    return result;
-}
-
-/**
- * Form array of albums
- * @param  {} data - Returned response result in JSON format from new album releases request.
- * @returns Array with new album releases
- */
-function GetNewAlbumReleases(data) {
-    let result = [];
-    for (let i = 0; i < data.albums.items.length; i++) {
-        if (result.length === new_albums_limit)
-            break;
-        let image_link = data.albums.items[i].images.length > 0 ?
-            data.albums.items[i].images[0].url : defaultAvatar;
-        let playlist = {
-            href: data.albums.items[i].href,
-            name: data.albums.items[i].name.length > 15 ?
-                data.albums.items[i].name.slice(0, 15) + '...' : data.albums.items[i].name,
-            image_url: image_link,
-            desc: 'Треков: ' + data.albums.items[i].total_tracks,
-            id: data.albums.items[i].id,
-            type: 'Альбом'
-        };
-        result.push(playlist);
-    }
+    if (!(data.albums.items === undefined || data.albums.items.length === 0))
+        result.albums = handleSpotifyArray(data.albums.items, itemHandlers.albumHandler);
     return result;
 }
 
@@ -238,36 +222,14 @@ function GetNewAlbumReleases(data) {
  * @param  {} data - Returned response result in JSON format from get playlist tracks request.
  * @returns Prepared from request object with with information about playlist.
  */
-export function FormTracksOfPlaylist(data) {
+export function formTracksOfPlaylist(data) {
     let result = {};
-    if (!(data.tracks.items === undefined && data.tracks.items.length === 0)) {
-        result.tracks = GetTracksFromPlaylist(data);
+    if (!(data.tracks.items === undefined || data.tracks.items.length === 0)) {
+        result.tracks = handleSpotifyArray(data.tracks.items, itemHandlers.playlistTrackHandler);
         result.name = data.name;
         result.image = data.images.length > 0 ?
         data.images[0].url : defaultPlaylistImage;
-        result.id = data.id;
-    }
-    return result;
-}
-
-/**
- * Form array of tracks
- * @param  {} data - Returned response result in JSON format from get playlist request.
- * @returns Array with tracks
- */
-function GetTracksFromPlaylist(data) {
-    let result = [];
-    for (let i = 0; i < data.tracks.items.length; i++) {
-        let image_link = data.tracks.items[i].track.album.images.length > 0 ?
-            data.tracks.items[i].track.album.images[0].url : defaultAvatar;
-        let track = {
-            href: data.tracks.items[i].track.href,
-            name: data.tracks.items[i].track.name,
-            author: data.tracks.items[i].track.artists.map(x => x.name).join(' '),
-            image_url: image_link,
-            duration: data.tracks.items[i].track.duration_ms
-        };
-        result.push(track);
+        result.id = data.id;    
     }
     return result;
 }
@@ -277,33 +239,14 @@ function GetTracksFromPlaylist(data) {
  * @param  {} data - Returned response result in JSON format from get album tracks request.
  * @returns Prepared from request object with with information about album.
  */
-export function FormTracksOfAlbum(data) {
+export function formTracksOfAlbum(data) {
     let result = {};
-    if (!(data.tracks.items === undefined && data.tracks.items.length === 0)) {
-        result.tracks = GetTracksFromAlbum(data);
+    if (!(data.tracks.items === undefined || data.tracks.items.length === 0)) {
         result.name = data.name;
         result.image = data.images.length > 0 ?
         data.images[0].url : defaultAvatar;
         result.id = data.id;
-    }
-    return result;
-}
-
-/**
- * Form array of tracks.
- * @param  {} data - Returned response result in JSON format from get album tracks request.
- * @returns Array with tracks.
- */
-function GetTracksFromAlbum(data) {
-    let result = [];
-    for (let i = 0; i < data.tracks.items.length; i++) {
-        let track = {
-            href: data.tracks.items[i].href,
-            name: data.tracks.items[i].name,
-            author: data.tracks.items[i].artists.map(x => x.name).join(' '),
-            duration: data.tracks.items[i].duration_ms
-        };
-        result.push(track);
+        result.tracks = handleSpotifyArray(data.tracks.items, itemHandlers.albumTrackHandler);
     }
     return result;
 }
@@ -313,36 +256,10 @@ function GetTracksFromAlbum(data) {
  * @param  {} data - Returned response result in JSON format from get shows request.
  * @returns Prepared from request object with information about shows.
  */
-export function FormShows(data) {
+export function formShows(data) {
     let result = {};
-    if (!(data.items === undefined && data.items.length === 0)) {
-        result.shows = GetShows(data);
-    }
-    return result;
-}
-
-/**
- * Form array of shows.
- * @param  {} data - Returned response result in JSON format from get shows request.
- * @returns Array with shows.
- */
-function GetShows(data) {
-    let result = [];
-    for (let i = 0; i < data.items.length; i++) {
-        if (result.length === featured_playlists_limit)
-            break;
-        let image_link = data.items[i].show.images.length > 0 ?
-            data.items[i].show.images[0].url : defaultPlaylistImage;
-        let playlist = {
-            href: data.items[i].show.href,
-            name: data.items[i].show.name,
-            image_url: image_link,
-            id: data.items[i].show.id,
-            owner: data.items[i].show.publisher > 15 ? 
-                data.items[i].show.publisher.slice(0, 15) + '...' : data.items[i].show.publisher,
-            type: 'Подкаст'
-        };
-        result.push(playlist);
+    if (!(data.items === undefined || data.items.length === 0)) {
+        result.shows = handleSpotifyArray(data.items, itemHandlers.showHandler);
     }
     return result;
 }
@@ -352,44 +269,30 @@ function GetShows(data) {
  * @param  {} data - Returned response result in JSON format from get show episodes request.
  * @returns Prepared from request object with information about show episodes.
  */
-export function FormEpisodesFromShow(data) {
+export function formEpisodesFromShow(data) {
     let result = {};
-    if (!(data.episodes.items === undefined && data.episodes.items.length === 0)) {
-        result.episodes = GetEpisodesFromShow(data);
+    if (!(data.episodes.items === undefined || data.episodes.items.length === 0)) {
         result.name = data.name;
-        result.image = data.images.length > 0 ?
-        data.images[0].url : defaultAvatar;
+        result.image = data.images.length > 0 ? data.images[0].url : defaultAvatar;
+        result.episodes = handleSpotifyArray(data.episodes.items, itemHandlers.episodeItemHandler);
+    }
+    return result;
+}
+
+function handleSpotifyArray(array, itemHandlerFunction) {
+    let result = [];
+    for (let i = 0; i < array.length; i++) {
+        result.push(itemHandlerFunction(array[i]));
     }
     return result;
 }
 
 /**
- * Form array of episodes.
- * @param  {} data - Returned response result in JSON format from get show episodes request.
- * @returns Array with episodes of show.
- */
-function GetEpisodesFromShow(data) {
-    let result = [];
-    for (let i = 0; i < data.episodes.items.length; i++) {
-        let track = {
-            href: data.episodes.items[i].href,
-            name: data.episodes.items[i].name,
-            desc: data.episodes.items[i].description > 15 ? 
-                data.episodes.items[i].description.slice(0, 15) + '...' : data.episodes.items[i].description,
-            image : data.episodes.items[i].images.length > 0 ?
-            data.episodes.items[i].images[0].url : defaultAvatar,
-            duration: data.episodes.items[i].duration_ms
-        };
-        result.push(track);
-    }
-    return result;
-}
-/**
  * Follow playlist by current user via playlistId
  * @param  {} playlistId - Playlist Id.
  */
-export function FollowPlaylist(playlistId) {
-    MakeRequest(Constants.FollwPlaylistUrl(playlistId), 'PUT', 'application/json')
+export function followPlaylist(playlistId) {
+    makeRequest(constants.follwPlaylistUrl(playlistId), getRequestHeadersWithToken('PUT', 'application/json'))
     .then((response) => {
         if (response instanceof Error) console.error("Error: can't follow playlist" + response.message);
     });
@@ -399,8 +302,8 @@ export function FollowPlaylist(playlistId) {
  * Follow show by current user via showId
  * @param  {} showId - Show Id.
  */
-export function FollowShow(showId) {
-    MakeRequest(Constants.FollowShowUrl(showId), 'PUT', 'application/json')
+export function followShow(showId) {
+    makeRequest(constants.followShowUrl(showId), getRequestHeadersWithToken('PUT', 'application/json'))
     .then((response) => {
         if (response instanceof Error) console.error("Error: can't follow show" + response.message);
     });
@@ -410,8 +313,8 @@ export function FollowShow(showId) {
  * Follow album by current user via albumId
  * @param  {} albumId - Album Id.
  */
-export function FollowAlbum(albumId) {
-    MakeRequest(Constants.FollowAlbumUrl(albumId), 'PUT', 'application/json')
+export function followAlbum(albumId) {
+    makeRequest(constants.followAlbumUrl(albumId), getRequestHeadersWithToken('PUT', 'application/json'))
     .then((response) => {
         if (response instanceof Error) console.error("Error: can't follow album" + response.message);
     });

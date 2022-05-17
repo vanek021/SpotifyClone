@@ -2,9 +2,9 @@ import Header from './common/header';
 import Footer from './common/footer';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { MakeRequest } from '../js/requestsManager';
-import { FollowAlbum, FormTracksOfAlbum, Constants } from '../js/spotify';
-import { GetTracksHTML } from '../js/InterfaceManager';
+import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
+import { followAlbum, formTracksOfAlbum, constants } from '../js/spotify';
+import { getTracksHTML } from '../js/InterfaceManager';
 
 function Album() {
     const [playlistState, setPlaylistState] = useState(null);
@@ -13,12 +13,12 @@ function Album() {
     const id = params.id;
 
     useEffect(() => {
-        MakeRequest(Constants.GetAlbumUrl(id), 'GET', 'application/json')
+        makeRequest(constants.getAlbumUrl(id), getRequestHeadersWithToken('GET', 'application/json'))
         .then((response) => {
             if (response instanceof Error) setPlaylistState(null);
             else {
-                setPlaylistState(FormTracksOfAlbum(response));
-                MakeRequest(Constants.IfUserFollowAlbumUrl(id), 'GET', 'application/json')
+                setPlaylistState(formTracksOfAlbum(response));
+                makeRequest(constants.ifUserFollowAlbumUrl(id), getRequestHeadersWithToken('GET', 'application/json'))
                 .then((data) => {
                     if (data instanceof Error) setIsPlaylistFollowedState(false);
                     setIsPlaylistFollowedState(data[0]);
@@ -27,7 +27,7 @@ function Album() {
         })
     }, [isPlaylistFollowedState, id]);
 
-    let tracks = GetTracksHTML(playlistState === null ? null : playlistState.tracks);
+    let tracks = getTracksHTML(playlistState === null ? null : playlistState.tracks);
     if (playlistState === null)
         return(
             <div className="app">
@@ -51,7 +51,7 @@ function Album() {
                             <div className="spotify-container__tracklist-wrapper">
                                 <div className="spotify-container__tracklist-title">{playlistState.name}</div>
                                 {isPlaylistFollowedState && <input className="spotify-container__tracklist-add-button" type="image" src="resources/images/button-added.png" alt="button-added"/>}
-                                {!isPlaylistFollowedState && <input className="spotify-container__tracklist-add-button" type="image" onClick={() => { FollowAlbum(playlistState.id); setIsPlaylistFollowedState(true); }} src="resources/images/button-add.png" alt="button-add"/>}
+                                {!isPlaylistFollowedState && <input className="spotify-container__tracklist-add-button" type="image" onClick={() => { followAlbum(playlistState.id); setIsPlaylistFollowedState(true); }} src="resources/images/button-add.png" alt="button-add"/>}
                             </div>
                         </div>
                         <div className="tracklist">

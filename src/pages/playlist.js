@@ -2,10 +2,10 @@ import Header from './common/header';
 import Footer from './common/footer';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { MakeRequest } from '../js/requestsManager';
-import { FormTracksOfPlaylist, Constants, FollowPlaylist } from '../js/spotify';
-import { GetTracksHTML } from '../js/InterfaceManager';
-import { GetUserIdCookieValue } from '../js/cookieManager';
+import { makeRequest, getRequestHeadersWithToken} from '../js/requestsManager';
+import { formTracksOfPlaylist, constants, followPlaylist } from '../js/spotify';
+import { getTracksHTML } from '../js/InterfaceManager';
+import { getUserId } from '../js/cookieManager';
 
 function Playlist() {
     const [playlistState, setPlaylistState] = useState(null);
@@ -14,12 +14,12 @@ function Playlist() {
     const id = params.id;
 
     useEffect(() => {
-        MakeRequest(Constants.GetPlaylistUrl(id), 'GET', 'application/json')
+        makeRequest(constants.getPlaylistUrl(id), getRequestHeadersWithToken('GET', 'application/json'))
         .then((response) => {
             if (response instanceof Error) setPlaylistState(null);
             else {
-                setPlaylistState(FormTracksOfPlaylist(response));
-                MakeRequest(Constants.ifUsersFollowPlaylistUrl(id, GetUserIdCookieValue()), 'GET', 'application/json')
+                setPlaylistState(formTracksOfPlaylist(response));
+                makeRequest(constants.ifUsersFollowPlaylistUrl(id, getUserId()), getRequestHeadersWithToken('GET', 'application/json'))
                 .then((data) => {
                     if (data instanceof Error) setIsPlaylistFollowedState(false);
                     setIsPlaylistFollowedState(data[0]);
@@ -28,7 +28,7 @@ function Playlist() {
         });
     }, [isPlaylistFollowedState, id]);
 
-    let tracks = GetTracksHTML(playlistState === null ? null : playlistState.tracks);
+    let tracks = getTracksHTML(playlistState === null ? null : playlistState.tracks);
     if (playlistState === null)
         return(
             <div className="app">
@@ -52,7 +52,7 @@ function Playlist() {
                             <div className="spotify-container__tracklist-wrapper">
                                 <div className="spotify-container__tracklist-title">{playlistState.name}</div>
                                 {isPlaylistFollowedState && <input className="spotify-container__tracklist-add-button" type="image" src="resources/images/button-added.png" alt="button-add"/>}
-                                {!isPlaylistFollowedState && <input className="spotify-container__tracklist-add-button" type="image" onClick={() => { FollowPlaylist(playlistState.id); setIsPlaylistFollowedState(true); }} src="resources/images/button-add.png" alt="button-added"/>}
+                                {!isPlaylistFollowedState && <input className="spotify-container__tracklist-add-button" type="image" onClick={() => { followPlaylist(playlistState.id); setIsPlaylistFollowedState(true); }} src="resources/images/button-add.png" alt="button-added"/>}
                             </div> 
                             
                         </div>

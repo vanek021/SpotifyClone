@@ -1,14 +1,14 @@
 import Header from './common/header';
 import Footer from './common/footer';
-import { GetSubscriptionName, GetSubscriptionDesc, Constants } from '../js/spotify';
-import { MakeRequest } from '../js/requestsManager';
+import { getSubscriptionName, getSubscriptionDesc, constants } from '../js/spotify';
+import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
 import { useEffect, useState } from 'react';
 
  function Account() {
     const [state, setState] = useState(null)
 
     useEffect(() => {
-        MakeRequest(Constants.GetCurrentUserProfileUrl(), 'GET', 'application/json')
+        makeRequest(constants.getCurrentUserProfileUrl(), getRequestHeadersWithToken('GET', 'application/json'))
             .then((response) => { 
                 if (response instanceof Error) setState(null);
                 else setState(response);
@@ -68,13 +68,13 @@ import { useEffect, useState } from 'react';
                 <div className="account-row__plan">
                     <div className="account-row__title">Мой план</div>
                     <div className="account-row__plan-info">
-                        <div className="account-row__plan-subtitle">{GetSubscriptionName(state.product)}</div>
+                        <div className="account-row__plan-subtitle">{getSubscriptionName(state.product)}</div>
                     </div>
                 </div>
                 <div className="account-row__access">
                     <div className="account-row__title">Доступ</div>
                     <div className="account-row__access-info">
-                        <div className="account-row__access-subtitle">{GetSubscriptionDesc(state.product)}</div>
+                        <div className="account-row__access-subtitle">{getSubscriptionDesc(state.product)}</div>
                         <div className="account-row__access-description">Без оплаты</div>
                     </div>
                 </div>

@@ -1,33 +1,33 @@
 import Header from './common/header';
 import Footer from './common/footer';
 import { useEffect, useState } from 'react';
-import { FormFeaturedPlaylists, FormShows, Constants } from '../js/spotify';
-import { MakeRequest } from '../js/requestsManager';
-import { GetFeaturedPlaylistsHTML, GetShowsHTML } from '../js/InterfaceManager';
-import { CookieExists } from '../js/cookieManager';
+import { formFeaturedPlaylists, formShows, constants } from '../js/spotify';
+import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
+import { getFeaturedPlaylistsHTML, getShowsHTML } from '../js/InterfaceManager';
+import { cookieExists } from '../js/cookieManager';
 
  function Library() {
     const [playlistState, setPlaylistState] = useState(null);
     const [showState, setShowState] = useState(null);
 
     useEffect(() => {
-        if (CookieExists("token") && CookieExists("spotify_id")) {
-            MakeRequest(Constants.GetCurrentUserPlaylistsUrl(), 'GET', 'application/json')
+        if (cookieExists("token")) {
+            makeRequest(constants.getCurrentUserPlaylistsUrl(), getRequestHeadersWithToken('GET', 'application/json'))
             .then((response) => {
             if (response instanceof Error) setPlaylistState(null);
-            else setPlaylistState(FormFeaturedPlaylists(response));
+            else setPlaylistState(formFeaturedPlaylists(response));
             });
 
-            MakeRequest(Constants.GetSavedShowsUrl(), 'GET', 'application/json')
+            makeRequest(constants.getSavedShowsUrl(), getRequestHeadersWithToken('GET', 'application/json'))
             .then((response) => {
             if (response instanceof Error) setShowState(null);
-            else setShowState(FormShows(response));
+            else setShowState(formShows(response));
             });
         }       
     }, []);
     
-    let playlists = GetFeaturedPlaylistsHTML(playlistState === null ? null : playlistState.playlists);
-    let shows = GetShowsHTML(showState === null ? null : showState.shows);
+    let playlists = getFeaturedPlaylistsHTML(playlistState === null ? null : playlistState.playlists);
+    let shows = getShowsHTML(showState === null ? null : showState.shows);
     return (
     <div className="app">
         <Header/>

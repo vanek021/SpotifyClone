@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetTokenCookieValue, GetRefreshTokenCookieValue, GetUserIdCookieValue, CookieExists } from './cookieManager';
+import { getToken, getRefreshToken, getUserId, cookieExists } from './cookieManager';
 
 export const userContext = React.createContext();
 
@@ -7,8 +7,8 @@ export const CurrentUserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = React.useState({ name: 'Гость', token: '', refresh_token: '', spotify_id: '' })
 
   const fetchCurrentUser = () => {
-    if (CookieExists('token')) {
-      setCurrentUser({ name: 'Пользователь', token: GetTokenCookieValue(), refresh_token: GetRefreshTokenCookieValue(), spotify_id: GetUserIdCookieValue() })
+    if (cookieExists('token')) {
+      setCurrentUser({ name: 'Пользователь', token: getToken(), refresh_token: getRefreshToken(), spotify_id: getUserId() })
     }     
     else {
       setCurrentUser({ name: 'Гость', token: '', refresh_token: '', spotify_id: '' })

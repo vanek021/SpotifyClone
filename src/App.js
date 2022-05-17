@@ -9,17 +9,15 @@ import Playlist from './pages/playlist';
 import Album from './pages/album';
 import Show from './pages/show';
 import { CurrentUserProvider } from './js/userContext';
-import { RefreshUserAccessToken } from './js/auth';
+import { refreshUserAccessToken } from './js/auth';
 import { useEffect } from 'react';
+import { cookieExists } from './js/cookieManager';
 
 
 function App() {
-    
     useEffect(() => {
-        setInterval(() => {
-            console.log("refreshing access token if exists in cookie");
-            RefreshUserAccessToken();
-        }, 100000);
+        if (cookieExists("token"))
+            refreshUserAccessToken();
     }, []);
 
     return (

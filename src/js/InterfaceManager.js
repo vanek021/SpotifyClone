@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
  * @param  {} array - Array with tracks formed by spotify.js
  * @param  {} limit=-1 - Limit of tracks
  */
-export function GetSearchTracksHTML(array, limit = -1) {
+export function getSearchTracksHTML(array, limit = -1) {
     let result = [];
 
     for (let i = 0; i < array.length; i++) {
@@ -39,7 +39,7 @@ export function GetSearchTracksHTML(array, limit = -1) {
  * @param  {} array - Array with searched artists formed by spotify.js
  * @param  {} limit=-1 - Limit of artists
  */
-export function GetSearchArtistsHTML(array, limit = -1) {
+export function getSearchArtistsHTML(array, limit = -1) {
     let result = [];
 
     for (let i = 0; i < array.length; i++) {
@@ -63,9 +63,9 @@ export function GetSearchArtistsHTML(array, limit = -1) {
  * @param  {} array - Array with featured playlists formed by spotify.js
  * @param  {} limit=-1 - Limit of artists
  */
-export function GetFeaturedPlaylistsHTML(array, limit = -1) {
+export function getFeaturedPlaylistsHTML(array, limit = -1) {
     let result = [];
-    if (array == null || array.length === 0) {
+    if (!array || array.length === 0) {
         result.push(<div className="content__technical_title" key={0}>
                 Исполнителей не найдено. Для просмотра необходимо авторизоваться.
             </div>);
@@ -88,7 +88,7 @@ export function GetFeaturedPlaylistsHTML(array, limit = -1) {
  * @param  {} array - Array with new album releases formed by spotify.js
  * @param  {} limit=-1 - Limit of albums
  */
-export function GetNewAlbumReleasesHTML(array, limit = -1) {
+export function getNewAlbumReleasesHTML(array, limit = -1) {
     let result = [];
 
     if (array == null || array.length === 0) {
@@ -114,10 +114,10 @@ export function GetNewAlbumReleasesHTML(array, limit = -1) {
  * @param  {} array - Array with tracks formed by spotify.js
  * @param  {} limit=-1 - Limit of tracks
  */
-export function GetTracksHTML(array, limit = -1) {
+export function getTracksHTML(array, limit = -1) {
     let result = [];
 
-    if (array == null || array.length === 0) {
+    if (!array || array.length === 0) {
         result.push(<div className="tracklist__technical-title" key={0}>
                 Треков не найдено.
             </div>);
@@ -153,9 +153,9 @@ export function GetTracksHTML(array, limit = -1) {
  * @param  {} array - Array with shows formed by spotify.js
  * @param  {} limit=-1 - Limit of shows
  */
-export function GetShowsHTML(array, limit = -1) {
+export function getShowsHTML(array, limit = -1) {
     let result = [];
-    if (array == null || array.length === 0) {
+    if (!array || array.length === 0) {
         result.push(<div className="content__technical_title" key={0}>
                 Исполнителей не найдено. Для просмотра необходимо авторизоваться.
             </div>);
@@ -177,9 +177,9 @@ export function GetShowsHTML(array, limit = -1) {
  * @param  {} array - Array with episodes if show formed by spotify.js
  * @param  {} limit=-1 - Limit of episodes
  */
-export function GetEpisodesHTML(array, limit = -1) {
+export function getEpisodesHTML(array, limit = -1) {
     let result = [];
-    if (array == null || array.length === 0) {
+    if (!array || array.length === 0) {
         result.push(<div className="content__technical_title" key={0}>
                 Треков не найдено.
             </div>);

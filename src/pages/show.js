@@ -2,9 +2,9 @@ import Header from './common/header';
 import Footer from './common/footer';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { MakeRequest } from '../js/requestsManager';
-import { FormEpisodesFromShow, Constants, FollowShow } from '../js/spotify';
-import { GetEpisodesHTML } from '../js/InterfaceManager';
+import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
+import { formEpisodesFromShow, constants, followShow } from '../js/spotify';
+import { getEpisodesHTML } from '../js/InterfaceManager';
 
 function Show() {
     const [showState, setShowState] = useState(null);
@@ -13,12 +13,12 @@ function Show() {
     const id = params.id;
 
     useEffect(() => {
-        MakeRequest(Constants.GetShowUrl(id), 'GET', 'application/json')
+        makeRequest(constants.getShowUrl(id), getRequestHeadersWithToken('GET', 'application/json'))
         .then((response) => {
             if (response instanceof Error) setShowState(null);
             else {
-                setShowState(FormEpisodesFromShow(response));
-                MakeRequest(Constants.IfUserFollowShowUrl(id), 'GET', 'application/json')
+                setShowState(formEpisodesFromShow(response));
+                makeRequest(constants.ifUserFollowShowUrl(id), getRequestHeadersWithToken('GET', 'application/json'))
                 .then((data) => {
                     if (data instanceof Error) setIsShowFollowedState(false);
                     setIsShowFollowedState(data[0]);
@@ -27,7 +27,7 @@ function Show() {
         })
     }, [isShowFollowedState, id]);
     
-    let tracks = GetEpisodesHTML(showState === null ? null : showState.episodes);
+    let tracks = getEpisodesHTML(showState === null ? null : showState.episodes);
     if (showState === null)
         return(
             <div className="app">
@@ -51,7 +51,7 @@ function Show() {
                             <div className="spotify-container__tracklist-wrapper">
                                 <div className="spotify-container__tracklist-title">{showState.name}</div>
                                 {isShowFollowedState && <input className="spotify-container__tracklist-add-button" type="image" src="resources/images/button-added.png" alt="add-button"/>}
-                                {!isShowFollowedState && <input className="spotify-container__tracklist-add-button" type="image" onClick={() => { FollowShow(showState.id); setIsShowFollowedState(true); }} src="resources/images/button-add.png" alt="added-button"/>}
+                                {!isShowFollowedState && <input className="spotify-container__tracklist-add-button" type="image" onClick={() => { followShow(showState.id); setIsShowFollowedState(true); }} src="resources/images/button-add.png" alt="added-button"/>}
                             </div>
                         </div>
                         <div className="tracklist">
