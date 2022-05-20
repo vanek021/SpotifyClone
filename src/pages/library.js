@@ -1,10 +1,9 @@
 import Header from './common/header';
 import Footer from './common/footer';
 import { useEffect, useState } from 'react';
-import { formFeaturedPlaylists, formShows, constants } from '../js/spotify';
 import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
-import { getFeaturedPlaylistsHTML, getShowsHTML } from '../js/InterfaceManager';
 import { cookieExists } from '../js/cookieManager';
+import PlaylistItem from './components/playlistItem';
 
  function Library() {
     const [playlistState, setPlaylistState] = useState(null);
@@ -12,22 +11,19 @@ import { cookieExists } from '../js/cookieManager';
 
     useEffect(() => {
         if (cookieExists("token")) {
-            makeRequest(constants.getCurrentUserPlaylistsUrl(), getRequestHeadersWithToken('GET', 'application/json'))
+            makeRequest(`https://api.spotify.com/v1/me/playlists`, getRequestHeadersWithToken('GET', 'application/json'))
             .then((response) => {
             if (response instanceof Error) setPlaylistState(null);
-            else setPlaylistState(formFeaturedPlaylists(response));
+            else setPlaylistState(response);
             });
 
-            makeRequest(constants.getSavedShowsUrl(), getRequestHeadersWithToken('GET', 'application/json'))
+            makeRequest(`https://api.spotify.com/v1/me/shows`, getRequestHeadersWithToken('GET', 'application/json'))
             .then((response) => {
             if (response instanceof Error) setShowState(null);
-            else setShowState(formShows(response));
+            else setShowState(response);
             });
         }       
     }, []);
-    
-    let playlists = getFeaturedPlaylistsHTML(playlistState === null ? null : playlistState.playlists);
-    let shows = getShowsHTML(showState === null ? null : showState.shows);
     return (
     <div className="app">
         <Header/>
@@ -35,13 +31,17 @@ import { cookieExists } from '../js/cookieManager';
             <div className="spotify-container">
                 <div className="spotify-container__title">Плейлисты</div>               
                 <div className="spotify-container__row">
-                    {playlists}
+                    {playlistState?.items.length > 0 && playlistState.items.map(function(item) {
+                        return (<PlaylistItem key={item.id} item={item} type="playlist"/>)
+                    })}
                 </div>
             </div>
             <div className="spotify-container">
                 <div className="spotify-container__title">Подкасты</div>               
                 <div className="spotify-container__row">
-                    {shows}
+                    {showState?.items.length > 0 && showState.items.map(function(item) {
+                        return (<PlaylistItem key={item.show.id} item={item} type="show"/>)
+                    })}
                 </div>
             </div>
         </main>

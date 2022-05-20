@@ -1,6 +1,6 @@
 import Header from './common/header';
 import Footer from './common/footer';
-import { getSubscriptionName, getSubscriptionDesc, constants } from '../js/spotify';
+import { getSubscriptionName, getSubscriptionDesc } from '../js/spotify';
 import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
 import { useEffect, useState } from 'react';
 
@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
     const [state, setState] = useState(null)
 
     useEffect(() => {
-        makeRequest(constants.getCurrentUserProfileUrl(), getRequestHeadersWithToken('GET', 'application/json'))
+        makeRequest(`https://api.spotify.com/v1/me`, getRequestHeadersWithToken('GET', 'application/json'))
             .then((response) => { 
                 if (response instanceof Error) setState(null);
                 else setState(response);

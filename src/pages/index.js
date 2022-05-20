@@ -1,10 +1,9 @@
 import Header from './common/header';
 import Footer from './common/footer';
 import { useEffect, useState } from 'react';
-import { formFeaturedPlaylists, formNewAlbumReleases, constants } from '../js/spotify';
-import { getFeaturedPlaylistsHTML, getNewAlbumReleasesHTML } from '../js/InterfaceManager';
 import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
 import { cookieExists } from '../js/cookieManager';
+import PlaylistItem from './components/playlistItem';
 
 function Index() {
     const [state, setState] = useState(null)
@@ -12,35 +11,37 @@ function Index() {
 
     useEffect(() => {
         if (cookieExists("token") && cookieExists("spotify_id")) {
-            makeRequest(constants.getFeaturedPlaylistsUrl(), getRequestHeadersWithToken('GET', 'application/json'))
+            makeRequest(`https://api.spotify.com/v1/browse/featured-playlists`, getRequestHeadersWithToken('GET', 'application/json'))
             .then((response) => {
             if (response instanceof Error) setState(null);
-            else setState(formFeaturedPlaylists(response.playlists));
+            else setState(response.playlists);
             })
 
-            makeRequest(constants.getNewAlbumReleasesUrl(), getRequestHeadersWithToken('GET', 'application/json'))
+            makeRequest(`https://api.spotify.com/v1/browse/new-releases`, getRequestHeadersWithToken('GET', 'application/json'))
             .then((response) => {
             if (response instanceof Error) setAlbumsState(null);
-            else setAlbumsState(formNewAlbumReleases(response));
+            else setAlbumsState(response);
             });
         }
     }, []);
-    let playlists = getFeaturedPlaylistsHTML(state === null ? null : state.playlists);
-    let albums = getNewAlbumReleasesHTML(albumsState == null ? null : albumsState.albums);
     return (
             <div className="app">
                 <Header/>
                 <main className="content">
                     <div className="spotify-container">
-                        <div className="spotify-container__title">Новые альбомы</div>               
-                        <div className="spotify-container__row">
-                            {albums}
-                        </div>
+                        <div className="spotify-container__title">Новые альбомы</div>   
+                            <div className="spotify-container__row">         
+                                {albumsState?.albums.items.length > 0 && albumsState.albums.items.map(function(item) {
+                                    return (<PlaylistItem key={item.id} item={item} type="album"/>)
+                                })}
+                            </div>
                     </div>
                     <div className="spotify-container">
-                        <div className="spotify-container__title">Выбор редакции</div>               
-                        <div className="spotify-container__row">
-                            {playlists}
+                        <div className="spotify-container__title">Выбор редакции</div>
+                            <div className="spotify-container__row">                
+                            {state?.items.length > 0 && state.items.map(function(item) {
+                                    return (<PlaylistItem key={item.id} item={item} type="playlist"/>)
+                                })}
                         </div>
                     </div>
                 </main>

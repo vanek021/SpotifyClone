@@ -4,7 +4,12 @@ import { getToken, getRefreshToken, getUserId, cookieExists } from './cookieMana
 export const userContext = React.createContext();
 
 export const CurrentUserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = React.useState({ name: 'Гость', token: '', refresh_token: '', spotify_id: '' })
+  const [currentUser, setCurrentUser] = React.useState({ 
+    name: cookieExists('spotify_id') ? 'Пользователь' : 'Гость', 
+    token: cookieExists('token') ? getToken() : '', 
+    refresh_token: cookieExists('refresh_token') ? getRefreshToken() : '', 
+    spotify_id: cookieExists('refresh_token')? getUserId() : '' 
+  })
 
   const fetchCurrentUser = () => {
     if (cookieExists('token')) {

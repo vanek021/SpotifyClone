@@ -1,33 +1,9 @@
 import { NavLink } from 'react-router-dom';
-import { useCurrentUser } from '../../js/userContext';
-import { authUrl } from '../../js/auth';
-import { useEffect } from 'react';
+import AccountLink from './accountLink';
 
 function Header() {
-    const { currentUser, fetchCurrentUser } = useCurrentUser()
-    useEffect(() => {
-        fetchCurrentUser();
-    }, []);
-    const isLoggedIn = currentUser.name !== 'Гость';
-    let accountLink;
-    if (isLoggedIn) {
-        accountLink = <NavLink to="/account" className="header__item" id="account-link" reloadDocument={true}>
-                        <div className="header__user-image">
-                            <img src="resources/images/user-image.png" alt="user-img"/>
-                        </div>
-                        <div className="header__text">{currentUser.name}</div>
-                    </NavLink>;
-    }
-    else {
-        accountLink = <a href={authUrl} className="header__item">
-                        <div className="header__user-image">
-                            <img src="resources/images/user-image.png" alt="user-img"/>
-                        </div>
-                        <div className="header__text">ВОЙТИ</div>
-                    </a>;
-    }
     return(
-            <header className="header">
+        <header className="header">
             <div className="header__row">
                 <NavLink to="/" className="header__item" reloadDocument={true}>
                     <div className="header__home-image">
@@ -53,7 +29,7 @@ function Header() {
                     </div>
                     <div className="header__text">ОТ АВТОРА</div>
                 </NavLink>
-                {accountLink}
+                <AccountLink/>
             </div>           
         </header>
 

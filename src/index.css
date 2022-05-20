@@ -1,10 +1,11 @@
+@import url(https://fonts.googleapis.com/css?family=Didact+Gothic|Comfortaa:400,700&subset=latin,cyrillic);
 * {
     margin: 0;
     padding: 0;
 }
 
 .app {
-    font-family: "Roboto", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Comfortaa","Roboto", "Tahoma", "Geneva", "Verdana", sans-serif;
     display: flex;
     flex-flow: column nowrap;
     height: 100vh;   
@@ -81,6 +82,10 @@
     margin-top: 17px;
     padding-bottom: 20px;
     padding-top: 20px;
+}
+
+.playlist:hover {
+    background-color: #0E0E0E;
 }
 
 .playlist__title {

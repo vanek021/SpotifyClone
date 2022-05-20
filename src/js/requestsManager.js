@@ -12,8 +12,9 @@ export async function makeRequest(requestUrl, requestData) {
     if (fetchResult.ok){
         if (requestData.method === 'GET' || requestData.method === 'POST') 
             return await fetchResult.json();
-        else
+        else {
             return fetchResult;
+        }          
     }     
     else {
         let jsonError = await fetchResult.json();
@@ -24,19 +25,9 @@ export async function makeRequest(requestUrl, requestData) {
 /**
  * Return request headers with provided request method and Authorization Access Token.
  * @param  {} method - Request method.
- * @param  {} content_type - Request content type.
+ * @param  {} contentType - Request content type.
  */
-export function getRequestHeadersWithToken(method, content_type) {
-    return  {
-        method: method,
-        headers: {
-            'Content-Type': content_type,
-            'Authorization': 'Bearer ' + getToken()
-        },
-    };
-}
-
-export function getRequestDataWithToken(method, contentType) {
+export function getRequestHeadersWithToken(method, contentType) {
     return  {
         method: method,
         headers: {
@@ -53,6 +44,6 @@ export function getRequest(contentType, authorization, body) {
             'Content-Type': contentType,
             'Authorization': authorization
         },
-        body: body
+        body
     };
 }
