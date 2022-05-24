@@ -8,20 +8,20 @@ export const CurrentUserProvider = ({ children }) => {
     name: cookieExists('spotify_id') ? 'Пользователь' : 'Гость', 
     token: cookieExists('token') ? getToken() : '', 
     refresh_token: cookieExists('refresh_token') ? getRefreshToken() : '', 
-    spotify_id: cookieExists('refresh_token')? getUserId() : '' 
+    spotify_id: cookieExists('refresh_token')? getUserId() : ''
   })
 
-  const fetchCurrentUser = () => {
-    if (cookieExists('token')) {
-      setCurrentUser({ name: 'Пользователь', token: getToken(), refresh_token: getRefreshToken(), spotify_id: getUserId() })
-    }     
-    else {
-      setCurrentUser({ name: 'Гость', token: '', refresh_token: '', spotify_id: '' })
-    }
+  const updateCurrentUser = () => {
+    setCurrentUser({
+      name: cookieExists('token') ? 'Пользователь' : 'Гость', 
+      token: cookieExists('token') ? getToken() : '', 
+      refresh_token: cookieExists('refresh_token') ? getRefreshToken() : '', 
+      spotify_id: cookieExists('spotify_id') ? getUserId() : ''
+    });
   }
 
   return (
-    <userContext.Provider value={{ currentUser, fetchCurrentUser }}>
+    <userContext.Provider value={{ currentUser, updateCurrentUser }}>
       {children}
     </userContext.Provider>
   )

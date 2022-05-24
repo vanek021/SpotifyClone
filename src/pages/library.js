@@ -24,6 +24,7 @@ import PlaylistItem from './components/playlistItem';
             });
         }       
     }, []);
+
     return (
     <div className="app">
         <Header/>
@@ -40,7 +41,7 @@ import PlaylistItem from './components/playlistItem';
                 <div className="spotify-container__title">Подкасты</div>               
                 <div className="spotify-container__row">
                     {showState?.items.length > 0 && showState.items.map(function(item) {
-                        return (<PlaylistItem key={item.show.id} item={item} type="show"/>)
+                        return (<PlaylistItem key={item.show.id} item={item.show} type="show"/>)
                     })}
                 </div>
             </div>

@@ -1,18 +1,20 @@
 import { useSearchParams, Navigate } from "react-router-dom";
 import { useCurrentUser } from '../js/userContext';
-import { setAccessTokenForUser, setUserDataInCookie } from '../js/auth';
+import { setAccessTokenForUser } from '../js/auth';
 import { useEffect } from 'react';
 
  function Token() {
     let [searchParams, setSearchParams] = useSearchParams();
-    const { currentUser, fetchCurrentUser } = useCurrentUser();
+    const { currentUser, updateCurrentUser } = useCurrentUser();
     let code = searchParams.get("code");
+
     useEffect(() => {
         if (code !== null){
             setAccessTokenForUser(code)
-            .then(response => fetchCurrentUser());
+                .then(response => updateCurrentUser());
         }          
     }, []);
+    
     return (
         <Navigate to="/" />
     );

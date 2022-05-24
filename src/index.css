@@ -439,57 +439,8 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding-top: 20px;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding: 20px 30px;
 
-}
-
-.song-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.song-item__wrapper {
-    display: flex;
-}
-
-.song-item__name {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;   
-    color: #FFF;
-}
-
-.song-item__desc {
-    display: flex;
-    flex-direction: column;
-    margin-left: 15px;
-    align-self: flex-start;
-}
-
-.song-item__author {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px; 
-    color: #9A9A9A;
-}
-
-.song-item__time {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;  
-    color: #9A9A9A;
-    align-self: center;
-}
-
-.song-item__image {
-    height: 37px;
-    width: 37px;
 }
 
 .performers__title {

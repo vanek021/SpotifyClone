@@ -3,8 +3,8 @@ import { AUTH_URL } from '../../js/auth';
 import { NavLink } from 'react-router-dom';
 
 function AccountLink() {
-    const { currentUser, fetchCurrentUser } = useCurrentUser();
-    const isLoggedIn = currentUser.name !== 'Гость';
+    const { currentUser, updateCurrentUser } = useCurrentUser();
+    const isLoggedIn = currentUser.name !== 'Гость' && currentUser.token !== "";
 
     if (isLoggedIn) {
         return(

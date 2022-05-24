@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
 import { cookieExists } from '../js/cookieManager';
 import ArtistsItem from './components/artistsItem';
-import SearchSongItem from './components/trackItems/searchSongItem';
 import { DEFAULT_AVATAR } from '../js/baseResources';
 import { SEARCH_ARTISTS_LIMIT, SEARCH_TRACKS_LIMIT } from '../js/spotify';
+import TrackItem from './components/trackItem';
 
  function Search() {
     const [query, setQuery] = useState("")
     const [searchResult, setSearchResult] = useState(null);
+    
     useEffect(() => {
         if (query !== "" && cookieExists("token"))
             makeRequest(`https://api.spotify.com/v1/search?type=artist,track&q=${query}`, getRequestHeadersWithToken('GET', 'application/json'))
@@ -72,8 +73,7 @@ import { SEARCH_ARTISTS_LIMIT, SEARCH_TRACKS_LIMIT } from '../js/spotify';
                     <div className="result__container">
 
                         <div className="result__best">
-                            <div className="result__title">Лучший результат</div>
-                            
+                            <div className="result__title">Лучший результат</div>             
                             <div className="result__best-info">
                                 <img className="result__best-avatar-image" src={bestSearch.image} alt="tessa-img"/>
                                 <div className="result__best-subtitle">{bestSearch.name}</div>
@@ -85,7 +85,7 @@ import { SEARCH_ARTISTS_LIMIT, SEARCH_TRACKS_LIMIT } from '../js/spotify';
                             <div className="result__title">Треки</div>
                             <div className="result__songs-row">
                                 {searchResult?.tracks.items.length > 0 && searchResult.tracks.items.slice(0, SEARCH_TRACKS_LIMIT).map(function(item) {
-                                    return (<SearchSongItem key={item.id} item={item}/>)
+                                    return (<TrackItem key={item.id} item={item} type="TrackPlaylist"/>)
                                 })}
                             </div>
                         </div>

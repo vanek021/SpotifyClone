@@ -1,5 +1,5 @@
 import { getRefreshToken, getTokenExpireTime, setCookie } from "./cookieManager";
-import { makeRequest, getRequest, getRequestHeadersWithToken } from "./requestsManager";
+import { makeRequest, getRequestData, getRequestHeadersWithToken } from "./requestsManager";
 
 const CLIENT_ID = '6ccb9412f4a242ca820c4fe4ef218595';
 const CLIENT_SECRET = '989a088f6d57445cbfd37d652de54e10';
@@ -17,7 +17,7 @@ export const AUTH_URL = 'https://accounts.spotify.com/authorize?response_type=co
  */
 export async function setAccessTokenForUser(code) {
     return makeRequest(`https://accounts.spotify.com/api/token`, 
-        getRequest('application/x-www-form-urlencoded', 
+        getRequestData('application/x-www-form-urlencoded', 
             'Basic ' + (btoa(CLIENT_ID + ':' + CLIENT_SECRET)),
             `grant_type=authorization_code&code=${code}&redirect_uri=${HOST_URL}`))
         .then(response => {
@@ -35,7 +35,7 @@ export function refreshUserAccessToken() {
     if(parseInt(Date.now()) < parseInt(getTokenExpireTime()))
         return;
     makeRequest(`https://accounts.spotify.com/api/token`, 
-        getRequest('application/x-www-form-urlencoded', 
+        getRequestData('application/x-www-form-urlencoded', 
             'Basic ' + btoa(CLIENT_ID + ':' + CLIENT_SECRET), 
             `grant_type=refresh_token&refresh_token=${getRefreshToken()}`))
     .then(response => {

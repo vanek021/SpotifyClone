@@ -37,7 +37,7 @@ export function getRequestHeadersWithToken(method, contentType) {
     };
 }
 
-export function getRequest(contentType, authorization, body) {
+export function getRequestData(contentType, authorization, body) {
     return  {
         method: 'POST',
         headers: {
