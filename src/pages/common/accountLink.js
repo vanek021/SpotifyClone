@@ -1,12 +1,17 @@
 import { useCurrentUser } from "../../js/userContext";
 import { AUTH_URL } from '../../js/auth';
 import { NavLink } from 'react-router-dom';
+import { useEffect, useState } from "react";
 
 function AccountLink() {
+    const [isLoggedState, setIsLoggedState] = useState(false);
     const { currentUser, updateCurrentUser } = useCurrentUser();
-    const isLoggedIn = currentUser.name !== 'Гость' && currentUser.token !== "";
 
-    if (isLoggedIn) {
+    useEffect(() => {
+        setIsLoggedState(currentUser.name !== 'Гость' && currentUser.token !== "");
+    }, [currentUser.token])
+
+    if (currentUser.name != "Гость") {
         return(
             <NavLink to="/account" className="header__item" id="account-link" reloadDocument={true}>
                 <div className="header__user-image">

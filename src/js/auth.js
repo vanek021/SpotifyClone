@@ -16,7 +16,7 @@ export const AUTH_URL = 'https://accounts.spotify.com/authorize?response_type=co
  * @param  {string} code - Code returned from Spotify.
  */
 export async function setAccessTokenForUser(code) {
-    return makeRequest(`https://accounts.spotify.com/api/token`, 
+    return await makeRequest(`https://accounts.spotify.com/api/token`, 
         getRequestData('application/x-www-form-urlencoded', 
             'Basic ' + (btoa(CLIENT_ID + ':' + CLIENT_SECRET)),
             `grant_type=authorization_code&code=${code}&redirect_uri=${HOST_URL}`))
@@ -62,7 +62,7 @@ export async function setUserDataInCookie(accessToken, tokenExpiresIn, refreshTo
 
     setCookie('token_expire_time', parseInt(Date.now()) + parseInt(tokenExpiresIn) * 1000);
 
-    makeRequest(`https://api.spotify.com/v1/me`, getRequestHeadersWithToken('GET', 'application/json'))
+    await makeRequest(`https://api.spotify.com/v1/me`, getRequestHeadersWithToken('GET', 'application/json'))
     .then((response) => {
         if (response instanceof Error) console.error('Failed to set spotify_id in cookie.');
         else setCookie('spotify_id', response.id);

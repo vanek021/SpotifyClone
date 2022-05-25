@@ -10,11 +10,11 @@ import { useEffect } from 'react';
 
     useEffect(() => {
         if (code !== null){
-            setAccessTokenForUser(code)
-                .then(response => updateCurrentUser());
+            setAccessTokenForUser(code).
+                then(response => updateCurrentUser());
         }          
     }, []);
-    
+
     return (
         <Navigate to="/" />
     );
