@@ -1,18 +1,13 @@
 import Header from './common/header';
 import Footer from './common/footer';
-import { getSubscriptionName, getSubscriptionDesc } from '../js/spotify';
-import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
+import { getSubscriptionName, getSubscriptionDesc, getUserData } from '../js/spotify';
 import { useEffect, useState } from 'react';
 
  function Account() {
     const [state, setState] = useState(null)
 
     useEffect(() => {
-        makeRequest(`https://api.spotify.com/v1/me`, getRequestHeadersWithToken('GET', 'application/json'))
-            .then((response) => { 
-                if (response instanceof Error) setState(null);
-                else setState(response);
-        });
+        getUserData().then((data) => setState(data));  
     }, []);
             
     return (
@@ -31,7 +26,7 @@ import { useEffect, useState } from 'react';
                             <div className="account-row__title">Аккаунт</div>
                             <div className="account-row__user-info">
                                 <div className="account-row__user-default-avatar-image">
-                                    <img src="resources/images/default-avatar-image.png" alt="def-avatar-img"/>
+                                    <img src="/resources/images/default-avatar-image.png" alt="def-avatar-img"/>
                                 </div>
                                 <div className="account-row__user-subtitle">{state.display_name}</div>
                                 <div className="account-row__user-description">Ваш аккаунт</div>
@@ -42,7 +37,7 @@ import { useEffect, useState } from 'react';
                             <div className="account-row__data-info">
                                 <div className="account-row__data-item">
                                     <div className="account-row__item-key"> Имя пользователя</div>
-                                    <div className="account-row__item-value">USER</div>
+                                    <div className="account-row__item-value">{state.display_name}</div>
                                 </div>
                                 <div className="account-row__data-item">
                                     <div className="account-row__item-key">Электронная почта</div>

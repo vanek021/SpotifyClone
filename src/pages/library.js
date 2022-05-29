@@ -1,9 +1,9 @@
 import Header from './common/header';
 import Footer from './common/footer';
 import { useEffect, useState } from 'react';
-import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
 import { cookieExists } from '../js/cookieManager';
 import PlaylistItem from './components/playlistItem';
+import { getUserPlaylists, getUserShows } from '../js/spotify';
 
  function Library() {
     const [playlistState, setPlaylistState] = useState(null);
@@ -11,17 +11,8 @@ import PlaylistItem from './components/playlistItem';
 
     useEffect(() => {
         if (cookieExists("token")) {
-            makeRequest(`https://api.spotify.com/v1/me/playlists`, getRequestHeadersWithToken('GET', 'application/json'))
-            .then((response) => {
-            if (response instanceof Error) setPlaylistState(null);
-            else setPlaylistState(response);
-            });
-
-            makeRequest(`https://api.spotify.com/v1/me/shows`, getRequestHeadersWithToken('GET', 'application/json'))
-            .then((response) => {
-            if (response instanceof Error) setShowState(null);
-            else setShowState(response);
-            });
+            getUserPlaylists().then((data) => setPlaylistState(data));
+            getUserShows().then((data) => setShowState(data));
         }       
     }, []);
 

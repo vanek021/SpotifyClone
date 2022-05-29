@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { getToken, getRefreshToken, getUserId, cookieExists } from './cookieManager';
 
 export const userContext = React.createContext();
@@ -6,9 +6,9 @@ export const userContext = React.createContext();
 export const CurrentUserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = React.useState(getUserData())
 
-  const updateCurrentUser = () => {
+  const updateCurrentUser = useCallback(() => {
     setCurrentUser(getUserData());
-  }
+  }, []);
 
   return (
     <userContext.Provider value={{ currentUser, updateCurrentUser }}>

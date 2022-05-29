@@ -14,8 +14,9 @@ export function cookieExists(key) {
  * @param  {} key - Key of cookie.
  * @param  {} value - Value of cookie.
  */
-export function setCookie(key, value) {
-    document.cookie=`${key}=${value}; path=/`;
+export function setCookie(key, value, lifeTime=null) {
+    if (!lifeTime) document.cookie=`${key}=${value}; path=/`;
+    else document.cookie = `${key}=${value}; expires=${new Date(Date.now() + lifeTime).toUTCString()}; path=/`;
 }
 
 /**
@@ -37,11 +38,4 @@ export function getRefreshToken() {
  */
 export function getUserId() {
     return document.cookie.replace(/(?:(?:^|.*;\s*)spotify_id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-}
-
-/**
- * Get token_expire_time cookie record by default path
- */
-export function getTokenExpireTime() {
-    return document.cookie.replace(/(?:(?:^|.*;\s*)token_expire_time\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 }

@@ -1,4 +1,4 @@
-import { getRefreshToken, getTokenExpireTime, setCookie } from "./cookieManager";
+import { cookieExists, getRefreshToken, setCookie } from "./cookieManager";
 import { makeRequest, getRequestData, getRequestHeadersWithToken } from "./requestsManager";
 
 const CLIENT_ID = '6ccb9412f4a242ca820c4fe4ef218595';
@@ -32,22 +32,14 @@ export async function setAccessTokenForUser(code) {
  * Request new Acces Token for user via Refresh Token.
  */
 export function refreshUserAccessToken() {
-    if(parseInt(Date.now()) < parseInt(getTokenExpireTime()))
+    if(cookieExists('token'))
         return;
     makeRequest(`https://accounts.spotify.com/api/token`, 
         getRequestData('application/x-www-form-urlencoded', 
             'Basic ' + btoa(CLIENT_ID + ':' + CLIENT_SECRET), 
             `grant_type=refresh_token&refresh_token=${getRefreshToken()}`))
-    .then(response => {
-        console.log(response);
-        if (response instanceof Error) console.error(response)
-        else {
-            if (response.hasOwnProperty('refresh_token'))
-                setUserDataInCookie(response.access_token, response.expires_in, response.refresh_token);
-            else
-                setUserDataInCookie(response.access_token, response.expires_in);
-        }
-    });
+    .then(response => setUserDataInCookie(response.access_token, response.expires_in, response.refresh_token))
+    .catch(e => console.error(e));
 }
 /**
  * Set User Data in Cookie by cookieManager
@@ -55,16 +47,11 @@ export function refreshUserAccessToken() {
  * @param  {string} refreshToken User Refresh Token.
  */
 export async function setUserDataInCookie(accessToken, tokenExpiresIn, refreshToken = null) {
-    setCookie('token', accessToken)
+    setCookie('token', accessToken, parseInt(tokenExpiresIn) * 1000);
 
     if (refreshToken)
         setCookie('refresh_token', refreshToken);
 
-    setCookie('token_expire_time', parseInt(Date.now()) + parseInt(tokenExpiresIn) * 1000);
-
     await makeRequest(`https://api.spotify.com/v1/me`, getRequestHeadersWithToken('GET', 'application/json'))
-    .then((response) => {
-        if (response instanceof Error) console.error('Failed to set spotify_id in cookie.');
-        else setCookie('spotify_id', response.id);
-    });
+    .then((response) => setCookie('spotify_id', response.id)).catch(e => console.error(e));
 }

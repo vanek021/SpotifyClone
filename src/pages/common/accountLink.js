@@ -8,14 +8,14 @@ function AccountLink() {
     const { currentUser, updateCurrentUser } = useCurrentUser();
 
     useEffect(() => {
-        setIsLoggedState(currentUser.name !== 'Гость' && currentUser.token !== "");
-    }, [currentUser.token])
+        setIsLoggedState(currentUser.name !== 'Гость');
+    }, [currentUser.name])
 
-    if (currentUser.name != "Гость") {
+    if (isLoggedState) {
         return(
             <NavLink to="/account" className="header__item" id="account-link" reloadDocument={true}>
                 <div className="header__user-image">
-                    <img src="resources/images/user-image.png" alt="user-img"/>
+                    <img src="/resources/images/user-image.png" alt="user-img"/>
                 </div>
                 <div className="header__text">{currentUser.name}</div>
             </NavLink>
@@ -25,7 +25,7 @@ function AccountLink() {
         return(
             <a href={AUTH_URL} className="header__item">
                 <div className="header__user-image">
-                    <img src="resources/images/user-image.png" alt="user-img"/>
+                    <img src="/resources/images/user-image.png" alt="user-img"/>
                 </div>
                 <div className="header__text">ВОЙТИ</div>
             </a>

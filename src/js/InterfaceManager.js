@@ -1,3 +1,5 @@
+const NORMAL_TITLE_LENGTH = 15;
+
 /**
  * Returns the time as a string to paste in HTML.
  * @param  {number} millisec - Time in milliseconds.
@@ -18,4 +20,9 @@ export function displayTime(millisec) {
        return `${hours}:${minutes}:${seconds}`;
     }
       return `${minutes}:${seconds}`;
+}
+
+export function normalizeTitle(str) {
+  return str.length > NORMAL_TITLE_LENGTH ? 
+    str.slice(0, NORMAL_TITLE_LENGTH) + '...' : str
 }

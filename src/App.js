@@ -16,8 +16,8 @@ import { cookieExists } from './js/cookieManager';
 
 function App() {
     useEffect(() => {
-        if (cookieExists("token"))
-            refreshUserAccessToken(); 
+        if (cookieExists("refresh_token") && !cookieExists("token"))
+            refreshUserAccessToken();
     }, []);
 
     return (

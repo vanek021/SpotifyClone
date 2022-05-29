@@ -1,19 +1,13 @@
 import { useEffect, useState } from 'react';
 import { cookieExists, getToken } from '../../js/cookieManager';
 import SpotifyPlayer from 'react-spotify-web-playback';
-import { makeRequest, getRequestHeadersWithToken } from '../../js/requestsManager';
+import { getUserData } from '../../js/spotify';
 
 function Footer() {
     const [accountState, setAccountState] = useState(null);
     useEffect(() => {
         if (cookieExists("token"))
-            makeRequest(`https://api.spotify.com/v1/me`, getRequestHeadersWithToken('GET', 'application/json'))
-            .then((response) => {
-                if (response instanceof Error) setAccountState(null);
-                else setAccountState(response);
-            });
-
-
+            getUserData().then((data) => setAccountState(data));
     }, []);
 
     if (accountState !== null && accountState.product === 'premium')

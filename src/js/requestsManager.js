@@ -7,7 +7,7 @@ import { getToken } from "./cookieManager";
  */
 export async function makeRequest(requestUrl, requestData) {
     const fetchResult = await fetch(requestUrl, requestData)
-        .catch((err) => console.log(err));
+        .catch((err) => { throw err });
         
     if (fetchResult.ok){
         if (requestData.method === 'GET' || requestData.method === 'POST') 
@@ -17,8 +17,8 @@ export async function makeRequest(requestUrl, requestData) {
         }          
     }     
     else {
-        let jsonError = await fetchResult.json();
-        return new Error(jsonError.error.status + ' ' + jsonError.error.message);
+        const jsonError = await fetchResult.json();
+        throw jsonError;
     }
 }
 
@@ -27,7 +27,7 @@ export async function makeRequest(requestUrl, requestData) {
  * @param  {} method - Request method.
  * @param  {} contentType - Request content type.
  */
-export function getRequestHeadersWithToken(method, contentType) {
+export function getRequestHeadersWithToken(method, contentType = "application/json") {
     return  {
         method: method,
         headers: {

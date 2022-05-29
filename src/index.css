@@ -534,6 +534,7 @@
     flex-direction: column;
     margin-left: 15px;
     align-self: flex-start;
+    max-height: 100%;
 }
 
 .track-item__author {
@@ -542,9 +543,11 @@
     font-size: 14px;
     line-height: 16px; 
     color: #9A9A9A;
+    word-break: break-word;
 }
 
 .track-item__time {
+    margin-left: 5px;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

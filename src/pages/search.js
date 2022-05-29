@@ -1,11 +1,10 @@
 import Header from './common/header';
 import Footer from './common/footer';
 import { useEffect, useState } from 'react';
-import { makeRequest, getRequestHeadersWithToken } from '../js/requestsManager';
 import { cookieExists } from '../js/cookieManager';
 import ArtistsItem from './components/artistsItem';
 import { DEFAULT_AVATAR } from '../js/baseResources';
-import { SEARCH_ARTISTS_LIMIT, SEARCH_TRACKS_LIMIT } from '../js/spotify';
+import { getSearchResult, SEARCH_ARTISTS_LIMIT, SEARCH_TRACKS_LIMIT } from '../js/spotify';
 import TrackItem from './components/trackItem';
 
  function Search() {
@@ -13,17 +12,17 @@ import TrackItem from './components/trackItem';
     const [searchResult, setSearchResult] = useState(null);
     
     useEffect(() => {
-        if (query !== "" && cookieExists("token"))
-            makeRequest(`https://api.spotify.com/v1/search?type=artist,track&q=${query}`, getRequestHeadersWithToken('GET', 'application/json'))
-            .then((response) => {
-                if (response instanceof Error) setSearchResult(null);
-                if (response.artists.items.length === 0 && response.tracks.items.length === 0) setSearchResult(null);
-                else setSearchResult(response);
+        if (query && cookieExists("token"))
+            getSearchResult(query).then((data) => {
+                if (data.artists.items.length === 0 && data.tracks.items.length === 0)
+                    setSearchResult(null);
+                else
+                    setSearchResult(data);
             });
     }, [query]);
     
     let main;
-    if (query === "")
+    if (!query)
         main =
             <main className="content">
                 <div className="search">
