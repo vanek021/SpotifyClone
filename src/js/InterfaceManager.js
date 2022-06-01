@@ -22,6 +22,11 @@ export function displayTime(millisec) {
       return `${minutes}:${seconds}`;
 }
 
+/**
+ * Normalizes a string according to the optimal length
+ * @param  {string} str
+ * @returns normalized string
+ */
 export function normalizeTitle(str) {
   return str.length > NORMAL_TITLE_LENGTH ? 
     str.slice(0, NORMAL_TITLE_LENGTH) + '...' : str

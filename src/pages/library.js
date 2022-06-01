@@ -2,8 +2,8 @@ import Header from './common/header';
 import Footer from './common/footer';
 import { useEffect, useState } from 'react';
 import { cookieExists } from '../js/cookieManager';
-import PlaylistItem from './components/playlistItem';
-import { getUserPlaylists, getUserShows } from '../js/spotify';
+import { getUserPlaylists, getUserShows, PLAYLIST_TYPES } from '../js/spotify';
+import SpotifyContainer from './components/spotifyContainer';
 
  function Library() {
     const [playlistState, setPlaylistState] = useState(null);
@@ -20,22 +20,8 @@ import { getUserPlaylists, getUserShows } from '../js/spotify';
     <div className="app">
         <Header/>
         <main className="content">
-            <div className="spotify-container">
-                <div className="spotify-container__title">Плейлисты</div>               
-                <div className="spotify-container__row">
-                    {playlistState?.items.length > 0 && playlistState.items.map(function(item) {
-                        return (<PlaylistItem key={item.id} item={item} type="playlist"/>)
-                    })}
-                </div>
-            </div>
-            <div className="spotify-container">
-                <div className="spotify-container__title">Подкасты</div>               
-                <div className="spotify-container__row">
-                    {showState?.items.length > 0 && showState.items.map(function(item) {
-                        return (<PlaylistItem key={item.show.id} item={item.show} type="show"/>)
-                    })}
-                </div>
-            </div>
+            <SpotifyContainer row={playlistState} type={PLAYLIST_TYPES.PLAYLIST} title="Плейлисты" />
+            <SpotifyContainer row={showState} type={PLAYLIST_TYPES.SHOW} title="Подкасты" />
         </main>
         <Footer/>
     </div>
