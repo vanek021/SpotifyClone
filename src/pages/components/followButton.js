@@ -9,15 +9,14 @@ function FollowButton({id, type}) {
         if (type === PLAYLIST_TYPES.PLAYLIST) getPlaylistState(id).then((data) => setIsFollowed(data[0]));
         if (type === PLAYLIST_TYPES.SHOW) getShowState(id).then((data) => setIsFollowed(data[0]));
     }, [isFollowed, id, type]);
-
-    return isFollowed ? (
-        <input className="spotify-container__tracklist-add-button" type="image" src="/resources/images/button-added.png" alt="button-added"/>
-    ) : (
-        <input className="spotify-container__tracklist-add-button" type="image" onClick={() => { 
+    const imageSource = isFollowed ? "/resources/images/button-added.png" : "/resources/images/button-add.png";
+    return (
+        <input className="spotify-container__tracklist-add-button" type="image" onClick={() => {
+            if (isFollowed) return;
             if (type === PLAYLIST_TYPES.ALBUM) followAlbum(id).then(() => setIsFollowed(true));
             if (type === PLAYLIST_TYPES.PLAYLIST) followPlaylist(id).then(() => setIsFollowed(true));
             if (type === PLAYLIST_TYPES.SHOW) followShow(id).then(() => setIsFollowed(true));
-        }} src="/resources/images/button-add.png" alt="button-add"/>
+        }} src={imageSource} alt="button-add"/>
     )
 }
 

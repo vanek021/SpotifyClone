@@ -7,8 +7,8 @@ function SpotifyContainer({row, type, title}) {
             <div className="spotify-container__title">{title}</div>
             <div className="spotify-container__row">
                 {row?.items.length > 0 && row.items.map(function(item) {
-                    if (type === PLAYLIST_TYPES.SHOW) return (<PlaylistItem key={item.show.id} item={item.show} type={type}/>)
-                    else return (<PlaylistItem key={item.id} item={item} type={type}/>)
+                    const playlistItem = type === PLAYLIST_TYPES.SHOW ? item.show : item;
+                    return (<PlaylistItem key={playlistItem.id} item={playlistItem} type={type}/>)
                 })}
             </div>
         </div>
