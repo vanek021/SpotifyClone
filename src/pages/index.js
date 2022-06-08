@@ -12,15 +12,15 @@ function Index() {
     useEffect(() => {
         if (cookieExists("token") || cookieExists("spotify_id")) {
             getFeaturedPlaylists().then((data) => setState(data));
-            getNewReleases().then((data) => setAlbumsState(data));
+            getNewReleases().then((data) => {setAlbumsState(data); console.log(data);});
         }
     }, []);
     return (
             <div className="app">
                 <Header/>
                 <main className="content">
-                    <SpotifyContainer row={albumsState?.albums} type={PLAYLIST_TYPES.ALBUM} title={"Новые альбомы"}/>
-                    <SpotifyContainer row={state?.playlists} type={PLAYLIST_TYPES.PLAYLIST} title={"Выбор редакции"}/>
+                    <SpotifyContainer row={albumsState?.albums.items} type={PLAYLIST_TYPES.ALBUM} title={"Новые альбомы"}/>
+                    <SpotifyContainer row={state?.playlists.items} type={PLAYLIST_TYPES.PLAYLIST} title={"Выбор редакции"}/>
                 </main>
                 <Footer/>
             </div>

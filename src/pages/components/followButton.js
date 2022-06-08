@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { followAlbum, followPlaylist, followShow, getAlbumState, getPlaylistState, getShowState, PLAYLIST_TYPES } from "../../js/spotify";
+import { followAlbum, followPlaylist, followShow, getAlbumState, getPlaylistState, getShowState, PLAYLIST_TYPES, removeUserAlbum, removeUserPlaylist, removeUserShow } from "../../js/spotify";
 
 function FollowButton({id, type}) {
     const [isFollowed, setIsFollowed] = useState(false);
@@ -12,10 +12,24 @@ function FollowButton({id, type}) {
     const imageSource = isFollowed ? "/resources/images/button-added.png" : "/resources/images/button-add.png";
     return (
         <input className="spotify-container__tracklist-add-button" type="image" onClick={() => {
-            if (isFollowed) return;
-            if (type === PLAYLIST_TYPES.ALBUM) followAlbum(id).then(() => setIsFollowed(true));
-            if (type === PLAYLIST_TYPES.PLAYLIST) followPlaylist(id).then(() => setIsFollowed(true));
-            if (type === PLAYLIST_TYPES.SHOW) followShow(id).then(() => setIsFollowed(true));
+            if (type === PLAYLIST_TYPES.ALBUM) {
+                if (!isFollowed)
+                    followAlbum(id).then(() => setIsFollowed(true));
+                else
+                    removeUserAlbum(id).then(() => setIsFollowed(false));
+            }
+            if (type === PLAYLIST_TYPES.PLAYLIST) {
+                if (!isFollowed)
+                    followPlaylist(id).then(() => setIsFollowed(true));
+                else
+                    removeUserPlaylist(id).then(() => setIsFollowed(false));
+            }   
+            if (type === PLAYLIST_TYPES.SHOW) {
+                if (!isFollowed)
+                    followShow(id).then(() => setIsFollowed(true));
+                else
+                    removeUserShow(id).then(() => setIsFollowed(false));
+            } 
         }} src={imageSource} alt="button-add"/>
     )
 }

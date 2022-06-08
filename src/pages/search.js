@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { cookieExists } from '../js/cookieManager';
 import ArtistsItem from './components/artistsItem';
 import { DEFAULT_AVATAR } from '../js/baseResources';
-import { getSearchResult, SEARCH_ARTISTS_LIMIT, SEARCH_TRACKS_LIMIT } from '../js/spotify';
+import { getSearchResult, SEARCH_ARTISTS_LIMIT, SEARCH_TRACKS_LIMIT, TRACK_TYPES } from '../js/spotify';
 import TrackItem from './components/trackItem';
 
  function Search() {
@@ -84,7 +84,7 @@ import TrackItem from './components/trackItem';
                             <div className="result__title">Треки</div>
                             <div className="result__songs-row">
                                 {searchResult?.tracks.items.length > 0 && searchResult.tracks.items.slice(0, SEARCH_TRACKS_LIMIT).map(function(item) {
-                                    return (<TrackItem key={item.id} item={item} type="TrackPlaylist"/>)
+                                    return (<TrackItem key={item.id} item={item} type={TRACK_TYPES.PLAYLIST_TRACK} />)
                                 })}
                             </div>
                         </div>

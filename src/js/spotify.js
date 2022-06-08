@@ -186,3 +186,39 @@ export function followAlbum(albumId) {
     return makeRequest(`https://api.spotify.com/v1/me/albums?ids=${albumId}`, getRequestHeadersWithToken('PUT'))
         .then(response => response).catch(e => alert("Error: can't follow album" + e));
 }
+
+/**
+ * Remove user saved show
+ * @param  {} showId - Show Id.
+ */
+ export function removeUserShow(showId) {
+    return makeRequest(`https://api.spotify.com/v1/me/shows?ids=${showId}`, getRequestHeadersWithToken('DELETE'))
+        .then(response => response).catch(e => alert("Error: can't remove user show" + e));
+}
+
+/**
+ * Remove user playlist
+ * @param  {} playlistId - Show Id.
+ */
+ export function removeUserPlaylist(playlistId) {
+    return makeRequest(`https://api.spotify.com/v1/playlists/${playlistId}/followers`, getRequestHeadersWithToken('DELETE'))
+        .then(response => response).catch(e => alert("Error: can't remove user playlist" + e));
+}
+
+/**
+ * Request to Spotify Web API for information about user albums
+ * @returns Promise with information about albums in JSON format
+ */
+ export function getUserAlbums() {
+    return makeRequest(`https://api.spotify.com/v1/me/albums`, getRequestHeadersWithToken('GET'))
+        .then(response => response).catch(e => console.error(e));
+}
+
+/**
+ * Remove user album
+ * @param  {} albumId - album Id.
+ */
+ export function removeUserAlbum(albumId) {
+    return makeRequest(`https://api.spotify.com/v1/me/albums?ids=${albumId}`, getRequestHeadersWithToken('DELETE'))
+        .then(response => response).catch(e => alert("Error: can't remove user album" + e));
+}
