@@ -12,7 +12,7 @@ function Index() {
     useEffect(() => {
         if (cookieExists("token") || cookieExists("spotify_id")) {
             getFeaturedPlaylists().then((data) => setState(data));
-            getNewReleases().then((data) => {setAlbumsState(data); console.log(data);});
+            getNewReleases().then((data) => setAlbumsState(data));
         }
     }, []);
     return (

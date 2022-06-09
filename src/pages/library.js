@@ -14,10 +14,10 @@ import SpotifyContainer from './components/spotifyContainer';
         if (cookieExists("token")) {
             getUserPlaylists().then((data) => setPlaylistState(data));
             getUserShows().then((data) => setShowState(data));
-            getUserAlbums().then((data) => {setAlbumState(data.items.map(item => item.album));});
+            getUserAlbums().then((data) => setAlbumState(data.items.map(item => item.album)));
         }       
     }, []);
-    console.log(albumState);
+
     return (
     <div className="app">
         <Header/>
