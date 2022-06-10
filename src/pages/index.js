@@ -19,8 +19,8 @@ function Index() {
             <div className="app">
                 <Header/>
                 <main className="content">
-                    <SpotifyContainer row={albumsState?.albums} type={PLAYLIST_TYPES.ALBUM} title={"Новые альбомы"}/>
-                    <SpotifyContainer row={state?.playlists} type={PLAYLIST_TYPES.PLAYLIST} title={"Выбор редакции"}/>
+                    <SpotifyContainer row={albumsState?.albums.items} type={PLAYLIST_TYPES.ALBUM} title={"Новые альбомы"}/>
+                    <SpotifyContainer row={state?.playlists.items} type={PLAYLIST_TYPES.PLAYLIST} title={"Выбор редакции"}/>
                 </main>
                 <Footer/>
             </div>

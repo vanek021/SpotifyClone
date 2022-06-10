@@ -5,7 +5,7 @@ export const SEARCH_TRACKS_LIMIT = 4;
 export const SEARCH_ARTISTS_LIMIT = 8;
 export const FEATURED_PLAYLISTS_LIMIT = 20;
 export const NEW_ALBUMS_LIMIT = 20;
-export const PLAYLIST_TYPES = { PLAYLIST: "playlist", ALBUM: "album", SHOW: "show" }
+export const PLAYLIST_TYPES = { PLAYLIST: "PLAYLIST", ALBUM: "ALBUM", SHOW: "SHOW" }
 export const TRACK_TYPES = { ALBUM_TRACK: "albumTrack", SHOW_EPISODE: "showEpisode", PLAYLIST_TRACK: "playlistTrack" }
 
 const SUBSCRIPTIONS = {
@@ -45,6 +45,59 @@ export function getSubscriptionDesc(subName) {
         return SUBSCRIPTIONS["error"].desc;
 }
 
+export const ADD_BUTTON_HANDLERS = {
+    "PLAYLIST": {
+        FOLLOW: 
+            function(playlistId) {
+                return makeRequest(`https://api.spotify.com/v1/playlists/${playlistId}/followers`, getRequestHeadersWithToken('PUT'))
+                    .then(response => response).catch(e => alert("Error: can't follow playlist" + e));
+        },
+        UNFOLLOW:
+            function(playlistId) {
+                return makeRequest(`https://api.spotify.com/v1/playlists/${playlistId}/followers`, getRequestHeadersWithToken('DELETE'))
+                    .then(response => response).catch(e => alert("Error: can't remove user playlist" + e));
+        },
+        GET_STATE:
+            function(id) {
+                return makeRequest(`https://api.spotify.com/v1/playlists/${id}/followers/contains?ids=${getUserId()}`, getRequestHeadersWithToken('GET'))
+                    .then(response => response).catch(e => console.error(e));
+        }
+    },
+    "ALBUM": {
+        FOLLOW: function(albumId) {
+                 return makeRequest(`https://api.spotify.com/v1/me/albums?ids=${albumId}`, getRequestHeadersWithToken('PUT'))
+                    .then(response => response).catch(e => alert("Error: can't follow album" + e));
+        },
+        UNFOLLOW:
+            function(albumId) {
+                return makeRequest(`https://api.spotify.com/v1/me/albums?ids=${albumId}`, getRequestHeadersWithToken('DELETE'))
+                    .then(response => response).catch(e => alert("Error: can't remove user album" + e));
+        },
+        GET_STATE:
+            function(id) {
+                return makeRequest(`https://api.spotify.com/v1/me/albums/contains?ids=${id}`, getRequestHeadersWithToken('GET'))
+                    .then(response => response).catch(e => console.error(e));
+        }
+    },
+    "SHOW": {
+        FOLLOW:
+            function(showId) {
+                return makeRequest(`https://api.spotify.com/v1/me/shows?ids=${showId}`, getRequestHeadersWithToken('PUT'))
+                    .then(response => response).catch(e => alert("Error: can't follow show" + e));
+        },
+        UNFOLLOW:
+            function(showId) {
+                return makeRequest(`https://api.spotify.com/v1/me/shows?ids=${showId}`, getRequestHeadersWithToken('DELETE'))
+                    .then(response => response).catch(e => alert("Error: can't remove user show" + e));
+        },
+        GET_STATE: 
+            function(id) {
+                return makeRequest(`https://api.spotify.com/v1/me/shows/contains?ids=${id}`, getRequestHeadersWithToken('GET'))
+                    .then(response => response).catch(e => console.error(e));
+        }
+    }
+}
+
 /**
  * Request to Spotify Web API for information about Spotify authenticated user
  * @returns Promise with information about user in JSON format
@@ -61,16 +114,6 @@ export function getUserData() {
  */
 export function getAlbumData(id) {
     return makeRequest(`https://api.spotify.com/v1/albums/${id}`, getRequestHeadersWithToken('GET'))
-        .then(response => response).catch(e => console.error(e));
-}
-
-/**
- * Request to Spotify Web API for information if is the user subscribed to the album
- * @param  {string} id - album id
- * @returns Promise with information if is the user subscribed to the album in JSON format
- */
-export function getAlbumState(id) {
-    return makeRequest(`https://api.spotify.com/v1/me/albums/contains?ids=${id}`, getRequestHeadersWithToken('GET'))
         .then(response => response).catch(e => console.error(e));
 }
 
@@ -121,16 +164,6 @@ export function getPlaylistData(id) {
 }
 
 /**
- * Request to Spotify Web API for information if is the user subscribed to the playlist
- * @param  {string} id - playlist id
- * @returns Promise with information if is the user subscribed to the playlist in JSON format
- */
-export function getPlaylistState(id) {
-    return makeRequest(`https://api.spotify.com/v1/playlists/${id}/followers/contains?ids=${getUserId()}`, getRequestHeadersWithToken('GET'))
-        .then(response => response).catch(e => console.error(e));
-}
-
-/**
  * Request to Spotify Web API to get search result
  * @param  {string} query - search text
  * @returns Promise with search result in JSON format
@@ -151,38 +184,10 @@ export function getShowData(id) {
 }
 
 /**
- * Request to Spotify Web API for information if is the user subscribed to the show
- * @param  {string} id - show id
- * @returns Promise with information if is the user subscribed to the show in JSON format
+ * Request to Spotify Web API for information about user albums
+ * @returns Promise with information about albums in JSON format
  */
-export function getShowState(id) {
-    return makeRequest(`https://api.spotify.com/v1/me/shows/contains?ids=${id}`, getRequestHeadersWithToken('GET'))
+ export function getUserAlbums() {
+    return makeRequest(`https://api.spotify.com/v1/me/albums`, getRequestHeadersWithToken('GET'))
         .then(response => response).catch(e => console.error(e));
-}
-
-/**
- * Follow playlist by current user via playlistId
- * @param  {} playlistId - Playlist Id.
- */
-export function followPlaylist(playlistId) {
-    return makeRequest(`https://api.spotify.com/v1/playlists/${playlistId}/followers`, getRequestHeadersWithToken('PUT'))
-        .then(response => response).catch(e => alert("Error: can't follow playlist" + e));
-}
-
-/**
- * Follow show by current user via showId
- * @param  {} showId - Show Id.
- */
-export function followShow(showId) {
-    return makeRequest(`https://api.spotify.com/v1/me/shows?ids=${showId}`, getRequestHeadersWithToken('PUT'))
-        .then(response => response).catch(e => alert("Error: can't follow show" + e));
-}
-
-/**
- * Follow album by current user via albumId
- * @param  {} albumId - Album Id.
- */
-export function followAlbum(albumId) {
-    return makeRequest(`https://api.spotify.com/v1/me/albums?ids=${albumId}`, getRequestHeadersWithToken('PUT'))
-        .then(response => response).catch(e => alert("Error: can't follow album" + e));
 }
